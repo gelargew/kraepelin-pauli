@@ -1,0 +1,19 @@
+.kraepelin {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    place-items: center;
+}
+
+.kraepelin-inputs {
+    display: flex;
+    width: 400px;
+    flex-wrap: wrap;
+    background: #111;
+    justify-content: space-between;
+}
+
+.kraepelin-input {
+    width: 30%;
+    height: 60px;
+}
