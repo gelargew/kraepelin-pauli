@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 
 export const Kraepelin = () => {
-    const [number , setNumber] = useState([randomArray(), randomArray()])
+    const [number , setNumber] = useState([3, 2, 0])
     const [point, setpoint] = useState({X: 0, Y: 0})
     const [score, setScore] = useState(0)
     const [q, setQ] = useState(getRandomInt)
@@ -14,7 +14,7 @@ export const Kraepelin = () => {
     }, [])
 
     const handleInput = e => {
-        setNumber(e.target.value)
+        setNumber([...number, e.target.value])
     }
 
     const handleKeyup = e => {
@@ -34,19 +34,9 @@ export const Kraepelin = () => {
     return (
         <div className='kraepelin'>
             <div className='kraepelin-numbers'>
-                {true && 
-                <>
-                    <p className='top-left'>toplef</p>
-                    <p className='top-right'>topri</p>
-
-                </>}
-                <p className='mid-mid'>ans</p>
-
-                {true && 
-                <>
-                    
-                    <p className='bot-right'>botrig</p>
-                </>}
+                {number.map(l => <li>
+                    {getRandomInt()} {l} {getRandomInt()}
+                </li>)}
             
 
             </div>
@@ -63,4 +53,6 @@ export const Kraepelin = () => {
 
 const getRandomInt = (max=10) => Math.floor(Math.random() * max)
 
-const randomArray = (max=10, length=50) => [... new Array(length)].map(() => getRandomInt(max))
+
+
+const randomArray = ({max=10, length=50}) => [... new Array(length)].map(() => getRandomInt(max))
