@@ -3,7 +3,8 @@ import React, { useEffect, useState, useRef } from 'react'
 
 export const Kraepelin = () => {
     const [number , setNumber] = useState(randomArray({length: 5000}))
-    const [answers, setAnswers] = useState(new Array(4900))
+    const [answers, setAnswers] = useState(new Array(100))
+    const [result, setResult] = useState(new Array(100))
     const [position, setPosition] = useState(0)
     const [curNumber, setCurNumber] = useState(number.slice(0, 20))
     const container = useRef(null)
@@ -22,10 +23,10 @@ export const Kraepelin = () => {
     },[position])
 
     const handleInput = async e => {
+        const val = e ? parseInt(e.target.value) : '0'
         setPosition(prev => prev + 1)
         setAnswers(prev => {
-            console.log(position)
-            prev[position] = e.target.value
+            prev[position] = val
             return prev
         })
     }
@@ -47,7 +48,7 @@ export const Kraepelin = () => {
                 <div className='kraepelin-numbers' ref={container}>
                     {curNumber.map((l, i) =>                  
                     <li key={i}>
-                        {l} {l} {i}
+                        {l}
                         <p>{answers[i]}</p>
                     </li>
                     )}
