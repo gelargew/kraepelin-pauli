@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from 'react'
 
 
 export const Kraepelin = () => {
-    const [number , setNumber] = useState(randomArray({length: 4900}))
-    const [point, setPoint] = useState({X: 0, Y: 0})
+    const [number , setNumber] = useState(randomArray({length: 5000}))
+    const [answers, setAnswers] = useState(new Array(4900))
+    const [position, setPosition] = useState(0)
     const [curNumber, setCurNumber] = useState(number.slice(0, 100))
     const container = useRef(null)
 
@@ -13,20 +14,26 @@ export const Kraepelin = () => {
 
     }, [])
 
-    const handleInput = e => {
-        setPoint({...point, Y: point.Y - 100})
-        setNumber([...number, e.target.value])
-        container.current.style.transform = `translate(${point.X}px, ${point.Y}px)`
+    useEffect( () => {
+        container.current.style.transform = `translateY(-${position*8}0px)`
+
+    },[position])
+
+    const handleInput = async e => {
+        setPosition(prev => prev + 1)
+        setAnswers(prev => {
+            console.log(position)
+            prev[position] = e.target.value
+            return prev
+        })
     }
 
     const handleKeyup = e => {
         const val = e.code.slice(-1)
-        setPoint({...point, Y: point.Y - 100})
-        container.current.style.transform = `translate(${point.X}px, ${point.Y}px)`
         
 
         if (!isNaN(val)) {
-            console.log(point)
+            console.log(position)
         }
 
     }
@@ -34,12 +41,14 @@ export const Kraepelin = () => {
     return (
         <div className='kraepelin' >
             <div className='container' >
+                <div className='answer-line'></div>
                 <div className='kraepelin-numbers' ref={container}>
-                    {curNumber.map((l, i) => <li key={i}>
+                    {curNumber.map((l, i) =>                  
+                    <li key={i}>
                         {l} {l} {i}
-                    </li>)}
-                
-
+                        <p>{answers[i]}</p>
+                    </li>
+                    )}
                 </div>
             </div>
 
