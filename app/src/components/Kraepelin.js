@@ -19,11 +19,11 @@ export const Kraepelin = ({
     }, [])
 
     useEffect( () => {
-        container.current.style.transform = `translateY(-${position%19*8}0px)`
-        if (position > 0 && position % 19 == 0) {
-            setCurNumber(number.slice(position+1, position+21))
+        container.current.style.transform = `translateY(-${position % (curNumber.length - 1) * 8}0px)`
+        if (position > 0 && position % (curNumber.length - 1) == 0) {
+            setCurNumber(number.slice(position, position + curNumber.length))
         }
-        setTimeout(() => setInputDisabled(false), 300)
+        setTimeout(() => setInputDisabled(false), 10)
     },[position])
 
     const handleInput = async e => {
@@ -32,6 +32,7 @@ export const Kraepelin = ({
         setPosition(prev => prev + 1)
         setAnswers(prev => {
             prev[position] = val
+            console.log(answers[position])
             return prev
         })
     }
@@ -62,7 +63,7 @@ export const Kraepelin = ({
                     {curNumber.map((l, i) =>                  
                     <li key={i}>
                         {l}
-                        <p>{answers[i]}</p>
+                        <p>{answers[parseInt(position/curNumber.length)*(curNumber.length - 1) + i]}</p>
                     </li>
                     )}
                 </div>
