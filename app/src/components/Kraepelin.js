@@ -5,7 +5,7 @@ export const Kraepelin = () => {
     const [number , setNumber] = useState(randomArray({length: 5000}))
     const [answers, setAnswers] = useState(new Array(4900))
     const [position, setPosition] = useState(0)
-    const [curNumber, setCurNumber] = useState(number.slice(0, 100))
+    const [curNumber, setCurNumber] = useState(number.slice(0, 20))
     const container = useRef(null)
 
     useEffect(() => {
@@ -15,8 +15,10 @@ export const Kraepelin = () => {
     }, [])
 
     useEffect( () => {
-        container.current.style.transform = `translateY(-${position*8}0px)`
-
+        container.current.style.transform = `translateY(-${position%19*8}0px)`
+        if (position > 0 && position % 19 == 0) {
+            setCurNumber(number.slice(position+1, position+21))
+        }
     },[position])
 
     const handleInput = async e => {
