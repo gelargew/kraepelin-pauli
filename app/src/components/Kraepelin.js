@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { ToggleTheme } from './toggleTheme'
 
 
 export const Kraepelin = ({
@@ -58,6 +59,7 @@ export const Kraepelin = ({
 
     return (
         <div className='kraepelin' >
+            <ToggleTheme />
             <div className='container' >
                 <div className={inputDisabled ? 'answer-line flash' : 'answer-line'}></div>
                 <div className='kraepelin-numbers' ref={container}>
