@@ -23,7 +23,7 @@ export const Kraepelin = ({
         if (position > 0 && position % (curNumber.length - 1) == 0) {
             setCurNumber(number.slice(position, position + curNumber.length))
         }
-        setTimeout(() => setInputDisabled(false), 10)
+        setTimeout(() => setInputDisabled(false), 300)
     },[position])
 
     const handleInput = async e => {
@@ -58,7 +58,7 @@ export const Kraepelin = ({
     return (
         <div className='kraepelin' >
             <div className='container' >
-                <div className='answer-line'></div>
+                <div className={inputDisabled ? 'answer-line flash' : 'answer-line'}></div>
                 <div className='kraepelin-numbers' ref={container}>
                     {curNumber.map((l, i) =>                  
                     <li key={i}>
