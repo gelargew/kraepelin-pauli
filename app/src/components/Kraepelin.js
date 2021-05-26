@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { ToggleTheme } from './toggleTheme'
 
 
 export const Kraepelin = ({
@@ -80,10 +79,10 @@ export const Kraepelin = ({
 
     return (
         <div className='kraepelin' >
-            <button onClick={() => {
+            {/* <button onClick={() => {
                 console.log(answers)
                 console.log(result)
-            }}>submit</button>
+            }}>submit</button> */}
             <div className='container' >
                 <div className={inputDisabled ? 'answer-line flash' : 'answer-line'}></div>
                 <div className='kraepelin-numbers' ref={container}>
@@ -106,7 +105,7 @@ export const Kraepelin = ({
                     <i className="fas fa-chevron-up fa-2x"></i>
                 </button>
                 <button className='kraepelin-input' onClick={handleInput} value="0" disabled={inputDisabled}>0</button>
-                <button className='kraepelin-input' onClick={handleDown} disabled={inputDisabled}>
+                <button className='kraepelin-input' onClick={handleDown} disabled={inputDisabled} title="down">
                     <i className="fas fa-chevron-down fa-2x"></i>
                 </button>
             </div>

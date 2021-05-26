@@ -131,3 +131,31 @@ button:hover {
 :disabled {
     color: var(--color-text-dim);
 }
+
+.theme-toggler {
+    appearance: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2rem;
+    height: 1rem;
+    background: var(--color-bg-3);
+    border-radius: 1em;
+    transition: 0.3s;
+    cursor: pointer;
+    transform: translate(-20px, 20px);
+}
+
+.theme-toggler::before {
+    content: "";
+    height: 100%;
+    width: 50%;
+    background: var(--color-bg-1);
+    border-radius: 50%;
+    position: absolute;
+    transition: 0.3s ease;
+}
+
+.theme-toggler:checked::before {
+    transform: translateX(100%);
+}
