@@ -15,7 +15,8 @@ export const Kraepelin = ({
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
-
+        const x = window.matchMedia("(prefers-color-scheme: light)")
+        console.log(x)
     }, [])
 
     useEffect( () => {
@@ -76,11 +77,11 @@ export const Kraepelin = ({
                     {num}
                 </button>)}
                 <button className='kraepelin-input' onClick={() => setPosition(prev => prev - 1)} disabled={inputDisabled}>
-                    <i class="fas fa-chevron-up fa-2x"></i>
+                    <i className="fas fa-chevron-up fa-2x"></i>
                 </button>
                 <button className='kraepelin-input' onClick={handleInput} value="0" disabled={inputDisabled}>0</button>
                 <button className='kraepelin-input' onClick={() => setPosition(prev => prev + 1)} disabled={inputDisabled}>
-                    <i class="fas fa-chevron-down fa-2x"></i>
+                    <i className="fas fa-chevron-down fa-2x"></i>
                 </button>
             </div>
         </div>
