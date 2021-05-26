@@ -46,15 +46,20 @@ body {
 .kraepelin-input {
     width: 33%;
     height: 70px;
-    background: var(--color-bg-1);
     color: var(--color-text-main);
-    font-size: large;
-    border-radius: 15px;
-    transition: 0.5;
+    font-size: x-large;
+    border: none;
+    transition: 0.5s;
+    background: none;
+    border-radius: 10px;
+}
+
+.kraepelin-input:active {
+    background: var(--color-bg-3);
 }
 
 .kraepelin-numbers {
-    padding-top: 51px;
+    padding-top: 100px;
     display: flex;
     flex-direction: column;
     transition: 0.4s;
@@ -62,9 +67,9 @@ body {
 }
 
 .kraepelin-numbers li {
-    font-size: large;
+    font-size: x-large;
     width: 100px;
-    min-height: 80px;
+    height: 100px;
     position: relative;
     margin: 0;
     transition: 0.6s;
@@ -77,8 +82,7 @@ body {
 }
 
 .container {
-    padding: 20px;
-    height: 200px;
+    height: 50%;
     overflow: hidden;
     transition: 1s;
     position: relative;

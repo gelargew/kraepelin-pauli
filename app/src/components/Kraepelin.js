@@ -19,7 +19,7 @@ export const Kraepelin = ({
     }, [])
 
     useEffect( () => {
-        container.current.style.transform = `translateY(-${position % (curNumber.length - 1) * 8}0px)`
+        container.current.style.transform = `translateY(-${position % (curNumber.length - 1)}00px)`
         if (position > 0 && position % (curNumber.length - 1) == 0) {
             setCurNumber(number.slice(position, position + curNumber.length))
         }
@@ -75,9 +75,13 @@ export const Kraepelin = ({
                 className='kraepelin-input' value={num} disabled={inputDisabled}>
                     {num}
                 </button>)}
-                <button className='kraepelin-input' onClick={() => setPosition(prev => prev - 1)} disabled={inputDisabled}>up</button>
+                <button className='kraepelin-input' onClick={() => setPosition(prev => prev - 1)} disabled={inputDisabled}>
+                    <i class="fas fa-chevron-up fa-2x"></i>
+                </button>
                 <button className='kraepelin-input' onClick={handleInput} value="0" disabled={inputDisabled}>0</button>
-                <button className='kraepelin-input' onClick={() => setPosition(prev => prev + 1)} disabled={inputDisabled}>down</button>
+                <button className='kraepelin-input' onClick={() => setPosition(prev => prev + 1)} disabled={inputDisabled}>
+                    <i class="fas fa-chevron-down fa-2x"></i>
+                </button>
             </div>
         </div>
     )
