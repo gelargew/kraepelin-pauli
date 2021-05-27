@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory, Prompt } from 'react-router-dom'
 import { userContext } from './App'
 
 
@@ -20,6 +20,7 @@ export const Practice = () => {
     const {user, setUser} = useContext(userContext)
     const [time, setTime] = useState(120)
     const [length, setLength] = useState(5000)
+    const history = useHistory()
 
 
     return (
@@ -32,6 +33,9 @@ export const Practice = () => {
             }} title="start practice">
                 START
             </Link>
+            <Prompt message={(location, action) => 
+                location.pathname.startsWith("/kraepelin") ? true : "leave?"
+            } />
         </main>
     )
 }
