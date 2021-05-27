@@ -41,6 +41,15 @@ body {
     height: 100vh;
 }
 
+button, a {
+    color: var(--color-text-main);
+    font-size: x-large;
+    border: none;
+    transition: 0.5s;
+    background: none;
+    border-radius: 10px;
+}
+
 .kraepelin {
     display: flex;
     flex-direction: column;
@@ -60,12 +69,6 @@ body {
 .kraepelin-input {
     width: 33%;
     height: 70px;
-    color: var(--color-text-main);
-    font-size: x-large;
-    border: none;
-    transition: 0.5s;
-    background: none;
-    border-radius: 10px;
 }
 
 .kraepelin-input:active {
@@ -158,4 +161,12 @@ button:hover {
 
 .theme-toggler:checked::before {
     transform: translateX(100%);
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    place-items: center;
+    height: 50%;
 }

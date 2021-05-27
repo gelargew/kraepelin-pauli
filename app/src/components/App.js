@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
+import { Dashboard, Practice } from './Dashboard'
 import { Kraepelin } from './Kraepelin'
 import { ToggleTheme } from './toggleTheme'
 
@@ -18,10 +19,20 @@ const App = () => {
                 <Route path='/kraepelin'>
                     <Kraepelin />
                 </Route>
+                <Route path="/initiate">
+                    <h1>initiate</h1>
+                </Route>
+                <Route path="/practice">
+                    <Practice />
+                </Route>
+                <Route path="/group">
+                    <h1>Group</h1>
+                </Route>
+                <Route path="/contactus">
+                    <h1>contactus</h1>
+                </Route>
                 <Route path='/'>
-                    <div>
-                        <Link to="/kraepelin"> krapelin</Link>
-                    </div>
+                    <Dashboard />
                 </Route>
             </Switch>
         </BrowserRouter>
