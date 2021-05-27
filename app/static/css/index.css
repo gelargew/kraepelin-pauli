@@ -30,8 +30,9 @@ html[color-scheme='light'] {
 body {
     color: var(--color-text-main);
     margin: 0;
-    font-family: "roboto";
+    font-family: 'Sawarabi Mincho';
     background: var(--color-bg-main);
+    transition: 0.5s;
 }
 
 #root {
@@ -171,4 +172,15 @@ button:hover {
     height: 50%;
     width: 300px;
     place-self: center;
+}
+
+.setup-inputs {
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+.setup-inputs input {
+    width: 60%;
+    text-align: center;
 }

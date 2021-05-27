@@ -1,29 +1,27 @@
 import React, { useEffect, useState, useRef } from 'react'
-import {Prompt} from 'react-router-dom'
+import {Prompt, useLocation} from 'react-router-dom'
 
 
-export const Kraepelin = ({
-    kraepelinLength = 5000,
-    columnCount = 100
-}) => {
-    const [numbers , setNumbers] = useState(randomArray({length: kraepelinLength + 1}))
-    const [answers, setAnswers] = useState(new Array(kraepelinLength))
-    const [result, setResult] = useState(new Array(kraepelinLength))
+export const Kraepelin = () => {
+    const {length, numberFormat, columnCount, time} = useLocation().state
+    const [numbers , setNumbers] = useState(randomArray({length: length + 1}))
+    const [answers, setAnswers] = useState(new Array(length))
+    const [result, setResult] = useState(new Array(length))
     const [position, setPosition] = useState(0)
     const [curNumbers, setCurNumbers] = useState(numbers.slice(0, columnCount))
     const container = useRef(null)
     const kraepelinInputs = useRef(null)
     const [inputDisabled, setInputDisabled] = useState(true)
+    const data = useLocation()
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
-        const x = window.matchMedia("(prefers-color-scheme: light)")
-        console.log(x)
+        console.log(data.state)
     }, [])
 
     useEffect( () => {
         container.current.style.transform = `translateY(-${position % (curNumbers.length - 1)}00px)`
-        if (position >= kraepelinLength) {
+        if (position >= length) {
             setPosition(0)
             setCurNumbers(numbers.slice(0, columnCount))
         }
@@ -71,7 +69,7 @@ export const Kraepelin = ({
         setPosition(prev => prev - 1)
     }
     const handleDown = () => {
-        if (position >= kraepelinLength) {
+        if (position >= length) {
             return false
         }
         setPosition(prev => prev + 1)
@@ -89,8 +87,8 @@ export const Kraepelin = ({
                 <div className='kraepelin-numbers' ref={container}>
                     {curNumbers.map((l, i) =>                  
                     <li key={i}>
-                        {l}-{i}
-                        <p>{answers[parseInt(position/curNumbers.length)*(curNumbers.length - 1) + i]} {i}</p>
+                        {numberFormat[l]}
+                        <p>{numberFormat[answers[parseInt(position/curNumbers.length)*(curNumbers.length - 1) + i]]}</p>
                     </li>
                     )}
                 </div>
@@ -100,12 +98,14 @@ export const Kraepelin = ({
                 {[1,2,3,4,5,6,7,8,9].map(num => 
                 <button key={num} onClick={handleInput} 
                 className='kraepelin-input' value={num} disabled={inputDisabled}>
-                    {num}
+                    {numberFormat[num]}
                 </button>)}
                 <button className='kraepelin-input' onClick={handleUp} disabled={inputDisabled}>
                     <i className="fas fa-chevron-up fa-2x"></i>
                 </button>
-                <button className='kraepelin-input' onClick={handleInput} value="0" disabled={inputDisabled}>0</button>
+                <button className='kraepelin-input' onClick={handleInput} value="0" disabled={inputDisabled}>
+                    {numberFormat[0]}
+                </button>
                 <button className='kraepelin-input' onClick={handleDown} disabled={inputDisabled} title="down">
                     <i className="fas fa-chevron-down fa-2x"></i>
                 </button>
