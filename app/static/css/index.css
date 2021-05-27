@@ -41,7 +41,7 @@ body {
     height: 100vh;
 }
 
-button, a {
+button, a, input {
     color: var(--color-text-main);
     font-size: x-large;
     border: none;
@@ -169,4 +169,6 @@ button:hover {
     justify-content: space-around;
     place-items: center;
     height: 50%;
+    width: 300px;
+    place-self: center;
 }

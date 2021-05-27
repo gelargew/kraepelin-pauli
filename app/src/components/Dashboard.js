@@ -25,7 +25,11 @@ export const Practice = () => {
 
     return (
         <main className="dashboard">
-            <input type="number" value={length} onChange={e => setLength(e.target.value)} disabled={!user.premium} />
+            <div>
+                <button><i className="fas fa-caret-left fa-2x"></i></button>
+                <input type="number" value={length} onChange={e => setLength(e.target.value)} disabled={!user.premium} />
+                <button><i className="fas fa-caret-right fa-2x"></i></button>
+            </div>         
             <input type="number" value={time} onChange={e => setTime(e.target.value)} disabled={!user.premium} />
             <Link to={{
                 pathname: "/kraepelin",
@@ -34,7 +38,7 @@ export const Practice = () => {
                 START
             </Link>
             <Prompt message={(location, action) => 
-                location.pathname.startsWith("/kraepelin") ? true : "leave?"
+                console.log(action)
             } />
         </main>
     )

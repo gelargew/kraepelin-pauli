@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import {Prompt} from 'react-router-dom'
 
 
 export const Kraepelin = ({
@@ -109,6 +110,8 @@ export const Kraepelin = ({
                     <i className="fas fa-chevron-down fa-2x"></i>
                 </button>
             </div>
+            <Prompt message={(location, action) => 
+            location.pathname.startsWith("/end") ? true : "Are you sure you want to leave?"} />
         </div>
     )
 }
