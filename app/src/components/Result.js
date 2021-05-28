@@ -1,24 +1,32 @@
 import React, { useEffect } from 'react'
-import {Chart, Scatter} from 'react-chartjs-2'
+import {Chart, Scatter, Pie} from 'react-chartjs-2'
 
 
 export const Result = () => {
     
-    const data = scatterData()
-    const options = {
+    const {scatterData, pieData} = formatData()
+    const scatterOptions = {
         parsing: false,
         animation: false
     }
-    useEffect(() => console.log(data), [])
+    const pieOptions = {
+        elements: {
+            arc: {
+                borderWidth: 0
+            }
+        }
+    }
+    useEffect(() => console.log(scatterData, pieData), [])
 
     return (
         <main>
-            <Scatter data={data} options={options}/>
+            <Scatter data={scatterData} options={scatterOptions}/>
+            <Pie data={pieData} options={pieOptions}/>
         </main>
     )
 }
 
-const scatterData = (result, columnCount=100) => {
+const formatData = (result, columnCount=100) => {
     let correct = []
     let empty = []
     let wrongs = []
@@ -34,7 +42,7 @@ const scatterData = (result, columnCount=100) => {
         else if (val === -1) wrongs.push(xy)
         else empty.push(xy)
     }
-    const data = {
+    const scatterData = {
         datasets: [
             {
                 label: 'correct',
@@ -53,5 +61,14 @@ const scatterData = (result, columnCount=100) => {
             }
         ]
     }
-    return data
+    const pieData = {
+        datasets: [
+            {
+                data: [correct.length, wrongs.length, empty.length],
+                backgroundColor: ['green', 'red', 'yellow']
+            }
+        ],
+        labels: ['correct', 'wrong', 'empty']
+    }
+    return {scatterData, pieData}
 }
