@@ -13,11 +13,12 @@ export const Kraepelin = () => {
     const kraepelinInputs = useRef(null)
     const [inputDisabled, setInputDisabled] = useState(true)
     const data = useLocation().state
+    const [timer, timesUp] = useTimer(5)
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
         console.log(data)
-    }, [])
+    }, [timesUp])
 
     useEffect( () => {
         container.current.style.transform = `translateY(-${position % (curNumbers.length - 1)}00px)`
@@ -118,18 +119,19 @@ export const Kraepelin = () => {
                     submit
             </Link>
 
-            <Timer time={time}/>
+            <div className="timer">{timer}</div>
         </div>
     )
 }
 
-const Timer = ({time=120}) => {
-    const [counter, setCounter] = useState(time*60)
+const useTimer = (initialState) => {
+    const [counter, setCounter] = useState(initialState)
+    const [timesUp, setTimesUp] = useState(false)
     useEffect(() => {
-        counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)
+        counter > 0 ? setTimeout(() => setCounter(counter - 1), 1000) : setTimesUp(true)
     }, [counter])
 
-    return <div className="timer">{counter}</div>
+    return [counter, timesUp]
 }
 
 const getRandomInt = (max=10) => Math.floor(Math.random() * max)
