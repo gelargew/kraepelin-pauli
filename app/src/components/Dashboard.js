@@ -29,7 +29,7 @@ export const Practice = () => {
         length: 5000,
         time: 120,
         operation: "addition",
-        numberFormat: numeralSystem['hiragana'],
+        numberFormat: numeralSystem['latin'],
         columnCount: 100
     })
     const [numeralChoice, setNumberalChoice] = useState(0)
@@ -44,7 +44,7 @@ export const Practice = () => {
             <small>length</small>
             <div className="setup-inputs">
                 <button><i className="fas fa-caret-left fa-2x"></i></button>
-                <input type="number" value={length} disabled={!user.premium} 
+                <input type="number" value={kraepelin.length} disabled={!user.premium} 
                 onChange={e => setKraepelin({...kraepelin, length: e.target.value})} />
                 <button><i className="fas fa-caret-right fa-2x"></i></button>
             </div>

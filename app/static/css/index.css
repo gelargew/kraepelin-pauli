@@ -184,3 +184,10 @@ button:hover {
     width: 60%;
     text-align: center;
 }
+
+.submitKraepelin {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(80px);
+}

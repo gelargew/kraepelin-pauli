@@ -1,13 +1,21 @@
 import React, { useEffect } from 'react'
-import {Chart, Scatter, Pie} from 'react-chartjs-2'
+import {Chart, Scatter, Pie, Radar} from 'react-chartjs-2'
+import { useLocation } from 'react-router'
 
 
 export const Result = () => {
-    
-    const {scatterData, pieData} = formatData()
+    const {result} = useLocation().state
+    const {scatterData, pieData} = formatData(result)
     const scatterOptions = {
         parsing: false,
-        animation: false
+        animation: false,
+        scales: {
+            xAxes: {
+                ticks: {
+                    padding: 0
+                }
+            }
+        }
     }
     const pieOptions = {
         elements: {
@@ -16,7 +24,7 @@ export const Result = () => {
             }
         }
     }
-    useEffect(() => console.log(scatterData, pieData), [])
+    useEffect(() => console.log(result), [])
 
     return (
         <main>
@@ -26,14 +34,13 @@ export const Result = () => {
     )
 }
 
-const formatData = (result, columnCount=100) => {
+const formatData = (result, columnCount = 100) => {
     let correct = []
     let empty = []
     let wrongs = []
-    const arr = new Array(5000)
-    arr[120] = 1
-    for (let i = 0; i < arr.length; i++) {
-        const val = arr[i]      
+
+    for (let i = 0; i < result.length; i++) {
+        const val = result[i]      
         const xy = {
             x: parseInt(i / columnCount),
             y: i % columnCount

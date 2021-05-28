@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
-import {Prompt, useLocation} from 'react-router-dom'
+import {Link, Prompt, useLocation} from 'react-router-dom'
 
-
+// record position for every minute to create chart !!!!! also make radar chart
 export const Kraepelin = () => {
     const {length, numberFormat, columnCount, time} = useLocation().state
     const [numbers , setNumbers] = useState(randomArray({length: length + 1}))
@@ -12,11 +12,11 @@ export const Kraepelin = () => {
     const container = useRef(null)
     const kraepelinInputs = useRef(null)
     const [inputDisabled, setInputDisabled] = useState(true)
-    const data = useLocation()
+    const data = useLocation().state
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
-        console.log(data.state)
+        console.log(data)
     }, [])
 
     useEffect( () => {
@@ -78,10 +78,7 @@ export const Kraepelin = () => {
 
     return (
         <div className='kraepelin' >
-            {/* <button onClick={() => {
-                console.log(answers)
-                console.log(result)
-            }}>submit</button> */}
+
             <div className='container' >
                 <div className={inputDisabled ? 'answer-line flash' : 'answer-line'}></div>
                 <div className='kraepelin-numbers' ref={container}>
@@ -92,6 +89,13 @@ export const Kraepelin = () => {
                     </li>
                     )}
                 </div>
+
+                <Link className='submitKraepelin' to={{
+                    pathname: "/result",
+                    state: { result: result }
+                }} replace>
+                    submit
+                </Link>
             </div>
 
             <div className='kraepelin-inputs' ref={kraepelinInputs}>
