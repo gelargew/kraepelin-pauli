@@ -6,14 +6,8 @@ export const Result = () => {
     
     const data = scatterData()
     const options = {
-        animation: false,
         parsing: false,
-        plugins: {
-            decimation: {
-                enabled: false,
-                algorithm: 'min-max',
-              }
-        },
+        animation: false
     }
     useEffect(() => console.log(data), [])
 
