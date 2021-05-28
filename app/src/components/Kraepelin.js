@@ -108,7 +108,7 @@ export const Kraepelin = () => {
             </div>
 
             <Prompt message={(location, action) => 
-            location.pathname.startsWith("/end") ? true : "Are you sure you want to leave?"} />
+            location.pathname.startsWith("/result") ? "Are you sure?" : "Are you sure you want to leave?"} />
 
             <Link className='submitKraepelin' to={{
                     pathname: "/result",

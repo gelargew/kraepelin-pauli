@@ -8,6 +8,10 @@ const numeralSystem = {
     choices: ['latin', 'hiragana' ]
 }
 
+const numeralSysReducer = (state, action) => {
+    return
+}
+
 
 
 export const Dashboard = () => {
@@ -29,12 +33,10 @@ export const Practice = () => {
         length: 5000,
         time: 120,
         operation: "addition",
-        numberFormat: numeralSystem[numeralSystem.choices[numeralChoice]],
+        numberFormat: "latin",
         columnCount: 100
     })
-    const [numeralChoice, setNumberalChoice] = useState(0)
-
-
+    const []
     
     
 
@@ -67,7 +69,8 @@ export const Practice = () => {
                     setNumberalChoice(prev => prev ? prev - 1 : numeralSystem.choices.length - 1)}>
                     <i className="fas fa-caret-left fa-2x"></i>
                 </button>
-                <input type="text" disabled value={numeralSystem.choices[numeralChoice]}/>
+                <input onChange={e => setKraepelin({...kraepelin, numberFormat: numeralSystem[e.target.value]})} type="text" disabled 
+                value={numeralSystem.choices[numeralChoice]}/>
                 <button onClick={() => 
                     setNumberalChoice(prev => prev + 1 < numeralSystem.choices.length ? prev + 1 : 0 )}>
                     <i className="fas fa-caret-right fa-2x"></i>
@@ -85,4 +88,42 @@ export const Practice = () => {
             } />
         </main>
     )
+}
+
+const useKraepelin = () => {
+    return
+}
+
+const useSelect = options => {
+    const [selected, setSelected] = useState(options[0])
+    let idx = 0
+    const left = () => {
+        idx--
+        if (idx < 0) {
+            idx = options.length - 1
+            return
+        }
+        setSelected(options[idx])       
+    }
+    const right = () => {
+        idx++
+        if (idx >= options.length + 1) {
+            idx = 0
+            return
+        }
+        setSelected(options[idx])
+    }
+
+    const Div = () => 
+    <div>
+        <button onClick={left}>
+            <i className="fas fa-caret-left fa-2x"></i>
+        </button>
+        <input disabled value={selected} />
+        <button onClick={right}>
+            <i className="fas fa-caret-right fa-2x"></i>
+        </button>
+    </div>
+
+    return [selected, Div]
 }
