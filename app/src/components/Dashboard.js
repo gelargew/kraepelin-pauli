@@ -29,7 +29,7 @@ export const Practice = () => {
         length: 5000,
         time: 120,
         operation: "addition",
-        numberFormat: numeralSystem.latin,
+        numberFormat: numeralSystem['hiragana'],
         columnCount: 100
     })
     const [numeralChoice, setNumberalChoice] = useState(0)
