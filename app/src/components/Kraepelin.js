@@ -12,12 +12,10 @@ export const Kraepelin = () => {
     const container = useRef(null)
     const kraepelinInputs = useRef(null)
     const [inputDisabled, setInputDisabled] = useState(true)
-    const data = useLocation().state
     const [timer, timesUp] = useTimer(5)
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
-        console.log(data)
     }, [timesUp])
 
     useEffect( () => {

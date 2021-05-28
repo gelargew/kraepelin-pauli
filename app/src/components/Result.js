@@ -29,8 +29,8 @@ export const Result = () => {
 
     return (
         <main>
-            <Scatter data={scatterData} options={scatterOptions}/>
-            <Pie data={pieData} options={pieOptions}/>
+            <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
+            <Pie className="pie-chart" data={pieData} options={pieOptions}/>
             <Link to="/">back</Link>
         </main>
     )
@@ -79,5 +79,15 @@ const formatData = (result, columnCount = 100) => {
         ],
         labels: ['correct', 'wrong', 'empty']
     }
-    return {scatterData, pieData}
+
+    const accuracy = correct.length / result.length
+
+    return {
+        scatterData, 
+        pieData, 
+        accuracy, 
+        correct: correct.length,
+        wrong: wrongs.length,
+        empty: empty.length
+    }
 }

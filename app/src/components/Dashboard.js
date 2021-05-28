@@ -29,7 +29,7 @@ export const Practice = () => {
         length: 5000,
         time: 120,
         operation: "addition",
-        numberFormat: numeralSystem['latin'],
+        numberFormat: numeralSystem[numeralSystem.choices[numeralChoice]],
         columnCount: 100
     })
     const [numeralChoice, setNumberalChoice] = useState(0)
@@ -58,15 +58,20 @@ export const Practice = () => {
 
             <div className="setup-inputs">
                 <button><i className="fas fa-caret-left fa-2x"></i></button>
-                <input type="number" value={kraepelin.operation} disabled={!user.premium} 
-                onChange={e => setKraepelin({...kraepelin, operation: e.target.value})} />
+                <input type="text" disabled value={kraepelin.operation} />
                 <button><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
             <div className="setup-inputs">
-                <button><i className="fas fa-caret-left fa-2x"></i></button>
-                <p>{numeralSystem.choices[numeralChoice]}</p>
-                <button><i className="fas fa-caret-right fa-2x"></i></button>
+                <button onClick={() => 
+                    setNumberalChoice(prev => prev ? prev - 1 : numeralSystem.choices.length - 1)}>
+                    <i className="fas fa-caret-left fa-2x"></i>
+                </button>
+                <input type="text" disabled value={numeralSystem.choices[numeralChoice]}/>
+                <button onClick={() => 
+                    setNumberalChoice(prev => prev + 1 < numeralSystem.choices.length ? prev + 1 : 0 )}>
+                    <i className="fas fa-caret-right fa-2x"></i>
+                </button>
             </div>
 
             <Link to={{
