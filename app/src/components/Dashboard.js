@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useReducer, useState } from 'react'
 import { Link, useHistory, Prompt } from 'react-router-dom'
 import { userContext } from './App'
 
@@ -8,8 +8,26 @@ const numeralSystem = {
     choices: ['latin', 'hiragana' ]
 }
 
-const numeralSysReducer = (state, action) => {
-    return
+const selectReducer = (state, action) => {
+    const limit = state.limit ?? state.options.length
+    let i
+    switch(action) {
+        case 'moveRight':
+            i = state.idx < limit - state.spaces ? state.idx + state.spaces : 0
+            return 'limit' in state ? {...state, idx: i}:
+            {...state, selected: state.options[i], idx: i}
+        case 'moveLeft':
+            console.log(action === 'moveLeft')
+            i = state.idx > 0 ? state.idx - state.spaces : limit - state.spaces
+            return 'limit' in state ? {...state, idx: i}:
+            {...state, selected: state.options[i], idx: i}
+        // case 'selected' in state:
+        //     return {...state, selected: state.options[i], idx: i}
+    
+    
+        default:
+            throw new Error()
+    }
 }
 
 
@@ -36,26 +54,44 @@ export const Practice = () => {
         numberFormat: "latin",
         columnCount: 100
     })
-    const []
-    
+    const [kLength, dispatchKLength] = useReducer(selectReducer, {limit: 8000, spaces: 100, idx: 5000})
+    const [kTime, dispatchKTime] = useReducer(selectReducer, {limit: 240, spaces: 10, idx: 0})
+    const [nm, dispatch] = useReducer(selectReducer, {
+        selected: 'latin',
+        options: ['latin', 'hiragana'],
+        spaces: 1,
+        idx: 0
+    })
     
 
 
     return (
         <main className="dashboard">
             <small>length</small>
-            <div className="setup-inputs">
+            {/* <div className="setup-inputs">
                 <button><i className="fas fa-caret-left fa-2x"></i></button>
                 <input type="number" value={kraepelin.length} disabled={!user.premium} 
                 onChange={e => setKraepelin({...kraepelin, length: e.target.value})} />
                 <button><i className="fas fa-caret-right fa-2x"></i></button>
-            </div>
+            </div> */}
 
             <div className="setup-inputs">
+                <button onMouseDown={() => dispatchKLength('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
+                <input readOnly value={kLength.idx} />
+                <button onClick={() => dispatchKLength('moveRight')}><i className="fas fa-caret-right fa-2x"></i></button>
+            </div>
+
+            {/* <div className="setup-inputs">
                 <button><i className="fas fa-caret-left fa-2x"></i></button>
                 <input type="number" value={kraepelin.time} disabled={!user.premium} 
                 onChange={e => setKraepelin({...kraepelin, time: e.target.value})} />
                 <button><i className="fas fa-caret-right fa-2x"></i></button>
+            </div> */}
+
+            <div className="setup-inputs">
+                <button onMouseDown={() => dispatchKTime('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
+                <input readOnly value={kTime.idx} />
+                <button onClick={() => dispatchKTime('moveRight')}><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
             <div className="setup-inputs">
@@ -64,7 +100,7 @@ export const Practice = () => {
                 <button><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
-            <div className="setup-inputs">
+            {/* <div className="setup-inputs">
                 <button onClick={() => 
                     setNumberalChoice(prev => prev ? prev - 1 : numeralSystem.choices.length - 1)}>
                     <i className="fas fa-caret-left fa-2x"></i>
@@ -75,6 +111,12 @@ export const Practice = () => {
                     setNumberalChoice(prev => prev + 1 < numeralSystem.choices.length ? prev + 1 : 0 )}>
                     <i className="fas fa-caret-right fa-2x"></i>
                 </button>
+            </div> */}
+
+            <div className="setup-inputs">
+                <button onClick={() => dispatch('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
+                <input readOnly value={nm.selected} />
+                <button onClick={() => dispatch('moveRight')}><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
             <Link to={{
