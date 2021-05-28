@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import {Chart, Scatter, Pie, Radar} from 'react-chartjs-2'
-import { useLocation } from 'react-router'
+import { useHistory, useLocation, Link } from 'react-router-dom'
 
 
 export const Result = () => {
+    const history = useHistory()
     const {result} = useLocation().state
     const {scatterData, pieData} = formatData(result)
     const scatterOptions = {
@@ -24,12 +25,13 @@ export const Result = () => {
             }
         }
     }
-    useEffect(() => console.log(result), [])
+    useEffect(() => console.log(history), [])
 
     return (
         <main>
             <Scatter data={scatterData} options={scatterOptions}/>
             <Pie data={pieData} options={pieOptions}/>
+            <Link to="/">back</Link>
         </main>
     )
 }

@@ -89,13 +89,6 @@ export const Kraepelin = () => {
                     </li>
                     )}
                 </div>
-
-                <Link className='submitKraepelin' to={{
-                    pathname: "/result",
-                    state: { result: result }
-                }} replace>
-                    submit
-                </Link>
             </div>
 
             <div className='kraepelin-inputs' ref={kraepelinInputs}>
@@ -114,14 +107,30 @@ export const Kraepelin = () => {
                     <i className="fas fa-chevron-down fa-2x"></i>
                 </button>
             </div>
+
             <Prompt message={(location, action) => 
             location.pathname.startsWith("/end") ? true : "Are you sure you want to leave?"} />
+
+            <Link className='submitKraepelin' to={{
+                    pathname: "/result",
+                    state: { result: result }
+                }} replace>
+                    submit
+            </Link>
+
+            <Timer time={time}/>
         </div>
     )
 }
 
+const Timer = ({time=120}) => {
+    const [counter, setCounter] = useState(time*60)
+    useEffect(() => {
+        counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)
+    }, [counter])
+
+    return <div className="timer">{counter}</div>
+}
+
 const getRandomInt = (max=10) => Math.floor(Math.random() * max)
-
-
-
 const randomArray = ({max=10, length=50}) => [... new Array(length)].map(() => getRandomInt(max))
