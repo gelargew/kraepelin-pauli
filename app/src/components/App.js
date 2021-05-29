@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
 import { Dashboard, Practice } from './Dashboard'
@@ -12,9 +12,16 @@ export const userContext = createContext()
 const App = () => {
     const [user, setUser] = useState({})
 
+    useEffect(async () => {
+        const response = await fetch(baseUrl + '/auth/current_user/')
+        const data = await response.json()
+        setUser(data)
+    }, [])
+
     return (
     <userContext.Provider value={{user, setUser}}>
         <ToggleTheme />
+        <button onClick={() => console.log(user)}>USER</button>
         <BrowserRouter>
             <Switch>
                 <Route path='/kraepelin'>
