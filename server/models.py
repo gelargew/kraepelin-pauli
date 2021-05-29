@@ -39,9 +39,9 @@ class Kraepelin(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     timeleft = models.IntegerField(default=7200, blank=True)
     numeral_system = models.CharField(choices=NUMERAL_SYSTEM_CHOICES, default='latin', max_length=32)
-    numbers = models.CharField(validators=[validate_comma_separated_integer_list], blank=True, null=True, max_length=10000)
-    answers = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10000)
-    results = models.CharField(validators=[validate_comma_separated_integer_list], max_length=10000)
+    numbers = models.CharField(validators=[validate_comma_separated_integer_list], blank=True, null=True, max_length=30000)
+    answers = models.CharField(max_length=30000)
+    results = models.CharField(validators=[validate_comma_separated_integer_list], max_length=30000)
     status = models.CharField(choices=STATUS_CHOICES, default='active', max_length=32)
     room = models.ForeignKey(Room, on_delete=models.RESTRICT, null=True, blank=True)
 

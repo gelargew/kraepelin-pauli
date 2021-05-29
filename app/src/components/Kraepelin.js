@@ -1,21 +1,25 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useContext } from 'react'
 import {Link, Prompt, useLocation} from 'react-router-dom'
+import { baseUrl, userContext } from './App'
+import { getCsrf } from './utils'
 
 // record position for every minute to create chart !!!!! also make radar chart
 export const Kraepelin = () => {
     const {length, numberFormat, columnCount, time} = useLocation().state
     const [numbers , setNumbers] = useState(randomArray({length: length + 1}))
-    const [answers, setAnswers] = useState(new Array(length))
-    const [result, setResult] = useState(new Array(length))
+    const [answers, setAnswers] = useState(new Array(length).fill(''))
+    const [result, setResult] = useState(new Array(length).fill(0))
     const [position, setPosition] = useState(0)
     const [curNumbers, setCurNumbers] = useState(numbers.slice(0, columnCount))
     const container = useRef(null)
     const kraepelinInputs = useRef(null)
     const [inputDisabled, setInputDisabled] = useState(true)
     const [timer, timesUp] = useTimer(5)
+    const {user} = useContext(userContext)
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
+        handleSubmit()
     }, [timesUp])
 
     useEffect( () => {
@@ -74,6 +78,29 @@ export const Kraepelin = () => {
         setPosition(prev => prev + 1)
         return true
     }
+
+    const handleSubmit = async () => {
+        const context = {
+            user: user.id,
+            timeleft: 20,
+            numeral_system: numberFormat,
+            results: result.toString(),
+            answers: answers.toString(),
+            numbers: numbers.toString()
+        }
+        const response = await fetch(`${baseUrl}/api/kraepelin/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrf()
+            },
+            body: JSON.stringify(context)
+        })
+        console.log(response)
+        const data = await response.json()
+        console.log(data)
+    }
+
 
     return (
         <div className='kraepelin' >
