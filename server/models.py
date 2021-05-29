@@ -8,7 +8,7 @@ import string
 import random
 
 def generate_unique_key():
-    s = ''.join(random.choices(string.ascii_uppercase + string.digits, 8))
+    s = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
     return s
 
 
@@ -19,7 +19,7 @@ class Room(models.Model):
     due_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self) -> str:
-        return f'{self.due_date}  -  {self.title} -  {self.kraepelin__set.count()}'
+        return f'{self.due_date}  -  {self.title} -  {self.kraepelin_set.count()}'
 
 
 class Kraepelin(models.Model):
