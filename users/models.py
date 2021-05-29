@@ -16,8 +16,8 @@ class UserManager(UserManager):
 
 class User(AbstractUser):
     email = models.EmailField(max_length=100, unique=True)
-    is_premium = models.BooleanField()
-    class_owner_privileges = models.IntegerField(default=0, blank=True)
+    is_premium = models.BooleanField(default=False)
+    room_owner_privileges = models.IntegerField(default=0, blank=True)
 
     objects = UserManager()
 
