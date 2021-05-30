@@ -5,9 +5,43 @@ import { Dashboard, Practice } from './Dashboard'
 import { Kraepelin } from './Kraepelin'
 import { Result } from './Result'
 import { ToggleTheme } from './toggleTheme'
+import { getCsrf } from './utils'
 
 export const baseUrl = window.location.origin
 export const userContext = createContext()
+
+const registerDummy = async () => {
+    const response = await fetch(`${baseUrl}/auth/register/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrf()
+        },
+        body: JSON.stringify({
+            email: 'user7@mail.com'
+        })
+    })
+    console.log(response)
+    const data = await response.json()
+    console.log(data)
+}
+
+const activateDummy = async () => {
+    const response = await fetch(`${baseUrl}/auth/activate/`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrf()
+        },
+        body: JSON.stringify({
+            email: 'user7@mail.com',
+            auth_token: 'MXVS43'
+        })
+    })
+    console.log(response)
+    const data = await response.json()
+    console.log(data)
+}
 
 const App = () => {
     const [user, setUser] = useState({})
@@ -16,6 +50,7 @@ const App = () => {
         const response = await fetch(baseUrl + '/auth/current_user/')
         const data = await response.json()
         setUser(data)
+        activateDummy()
     }, [])
 
     return (
