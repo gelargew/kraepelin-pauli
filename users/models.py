@@ -73,3 +73,7 @@ class User(AbstractUser):
     def activate(self) -> None:
         self.is_active = True
         super().save()
+    
+    def refresh_token(self):
+        self.auth_token = generate_auth_token()
+        super().save()

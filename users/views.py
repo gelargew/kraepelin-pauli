@@ -18,7 +18,6 @@ DummyUser = {
 def get_current_user(request):
     if request.user.is_authenticated:   
         context = UserSerializer(request.user).data
-        print(context)
         return JsonResponse(context)
     
     return JsonResponse(DummyUser)
@@ -30,8 +29,7 @@ def user_login(request):
         user = authenticate(**data)
         if user:
             login(request, user)
-            context = UserSerializer(user).data
-            
+            context = UserSerializer(user).data           
             return JsonResponse(context, status=200)
 
     return HttpResponse(status=400)
@@ -49,11 +47,10 @@ def user_register(request):
         return HttpResponse(status=400)
 
     user.is_active = False
+    user.refresh_token()
     user.save()
-    context = UserSerializer(user).data
-    print(context)
 
-    return JsonResponse(context, status=201)
+    return JsonResponse(data, status=201)
 
 
 def user_activate(request):
@@ -66,7 +63,7 @@ def user_activate(request):
         user.activate()
         print(user)
     except ObjectDoesNotExist:
-        return False
+        return HttpResponse(status=404)
 
 
 def user_logout(request):

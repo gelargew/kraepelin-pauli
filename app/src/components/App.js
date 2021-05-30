@@ -1,62 +1,30 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useReducer, useState } from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
 import { AuthPage } from './Auth'
 import { Dashboard, Practice } from './Dashboard'
+import { useFetch } from './hooks'
 import { Kraepelin } from './Kraepelin'
+import { userReducer } from './reducers'
 import { Result } from './Result'
 import { ToggleTheme } from './toggleTheme'
-import { getCsrf } from './utils'
 
 export const baseUrl = window.location.origin
 export const userContext = createContext()
 
-const registerDummy = async () => {
-    const response = await fetch(`${baseUrl}/auth/register/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCsrf()
-        },
-        body: JSON.stringify({
-            email: 'user7@mail.com'
-        })
-    })
-    console.log(response)
-    const data = await response.json()
-    console.log(data)
-}
-
-const activateDummy = async () => {
-    const response = await fetch(`${baseUrl}/auth/activate/`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCsrf()
-        },
-        body: JSON.stringify({
-            email: 'user7@mail.com',
-            auth_token: 'MXVS43'
-        })
-    })
-    console.log(response)
-    const data = await response.json()
-    console.log(data)
-}
 
 const App = () => {
-    const [user, setUser] = useState({})
+    const [user, dispatchUser] = useFetch({}, userReducer)
 
     useEffect(async () => {
-        const response = await fetch(baseUrl + '/auth/current_user/')
-        const data = await response.json()
-        setUser(data)
-        activateDummy()
+        dispatchUser({ type: 'fetchCurrentUser'})
+        console.log(user)
     }, [])
 
     return (
-    <userContext.Provider value={{user, setUser}}>
+    <userContext.Provider value={{user, dispatchUser}}>
         <ToggleTheme />
+        <button onClick={() => console.log(user)}>USER</button>
         <BrowserRouter>
         {user.is_authenticated ?       
             <Switch>
@@ -90,9 +58,8 @@ const App = () => {
     )
 }
 
-const userReducer = (state, action) => {
-    pass
-}
+
+
 
 
 render(<App />, document.querySelector('#root'))

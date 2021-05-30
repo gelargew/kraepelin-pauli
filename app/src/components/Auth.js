@@ -29,10 +29,10 @@ const AuthPage = () => {
         <main>
             <Redirect to='/auth' />
             <Route path='/auth/register'>
-                register
+                <RegisterPage />
             </Route>
             <Route path='/auth/login'>
-                Login
+                <LoginPage />
             </Route>
             <Route exact path="/auth">
                 <Link to='/auth/register'>REGISTER</Link>
@@ -44,12 +44,23 @@ const AuthPage = () => {
 
 
 const LoginPage = () => {
+    const {dispatchUser} = useContext(userContext)
+    const handleSubmit = e => {
+        e.preventDefault()
+        dispatchUser({
+            type: 'login',
+            data: {
+                'email': e.target.email.value,
+                'password': e.target.password.value
+            }
+        })
+    }
     
     return (
         <>
-            <form>
-                <input type='email' />
-                <input type='password' placeholder="password" />
+            <form onSubmit={handleSubmit}>
+                <input name='email' type='email' />
+                <input name='password' type='password' placeholder="password" />
                 <button>LOGIN</button>
             </form>
             <Link to="/auth/register">register</Link>
@@ -59,81 +70,41 @@ const LoginPage = () => {
 
 
 const RegisterPage = () => {
-    const [message, setMessage] = useState('')
-    const {setUser} = useContext(userContext)
-    const history = useHistory()
-    const [disabled, setDisabled] = useState(false)
-    const passwordInput = useRef(null)
-    const [passwordConfirmed, setPasswordConfirmed] = useState(true)
-
-    console.log(getCsrf())
-    const register = async e => {
+    const {user, dispatchUser} = useContext(userContext)
+    const handleRegister = e => {
         e.preventDefault()
-        setMessage('')
-        setDisabled(true)
-        console.log(getCsrf())
-        const response = await fetch(`${baseUrl}/auth/register/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'X-CSRFToken': getCsrf()
-            },
-            body: JSON.stringify({
-                username: e.target.username.value,
-                password: e.target.password.value,
+        dispatchUser({
+            type: 'register',
+            data: {
                 email: e.target.email.value
-            })
+            }
         })
-        
-        if (response.status === 201) {
-            const data = await response.json()
-            setUser(data)
-            history.push('/')
-        }
-        else if (response.status === 403) {
-        setMessage('something went wrong, if you are in private mode please enable cookies for csrf token')
-        }
-        setDisabled(false)
     }
-
-    const confirmPassword = e => {
-        setPasswordConfirmed(e.target.value === passwordInput.current.value)
+    const handleActivate = e => {
+        e.preventDefault()
+        dispatchUser({
+            type: 'activate',
+            data: {
+                email: user.email,
+                auth_token: e.target.token.value
+            }
+        })
     }
 
     return (
-        <div className='auth-page'>
-            <h3>Register</h3>
-            <form onSubmit={register}>
-                <label>
-                    Username:
-                    <input type='text' name='username' placeholder='username...' disabled={disabled} 
-                    title='Enter an username consisting of 6-16 hexadecimal digits' pattern="[0-9a-zA-Z]{6,16}" required />
-                </label>
-
-                <label>
-                    email:
-                    <input type='email' name='email' placeholder='email...' disabled={disabled} 
-                    title='Enter your email' required/>
-                </label>
-
-                <label>
-                    Password:
-                    <input ref={passwordInput} type='password' name='password'
-                    pattern="[0-9a-zA-Z]{8,16}" title="Enter an ID consisting of 8-16 hexadecimal digits"
-                    placeholder='password...' disabled={disabled} required/>
-                </label>
-
-                <label>
-                    Confirm password:
-                    <input onInput={confirmPassword} type='password' name='confirmpassword' 
-                    placeholder='confirm password...' disabled={disabled} title='Confirm your password' required
-                    className={passwordConfirmed ? '' : 'alert'} />
-                </label>
-
-                <button type='submit' disabled={!passwordConfirmed}>Register</button>
-            </form>
-            <small>{message}</small>
-        </div>
+        <>
+            {user.email ?
+                <form onSubmit={handleActivate}>
+                    <input name='email' type='email' value={user.email} disabled />
+                    <input name='token' />
+                    <button>Activate account</button>
+                </form>
+                :
+                <form onSubmit={handleRegister}>
+                    <input name='email' type='email' />
+                    <button>Register</button>
+                </form>}
+        </>
     )
 }
 
