@@ -1,8 +1,8 @@
 import React, { useContext, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, Redirect, Route, useHistory } from 'react-router-dom';
 import { baseUrl, userContext } from './App';
 
-export {LoginPage, RegisterPage, getCsrf}
+export {AuthPage, LoginPage, RegisterPage, getCsrf}
 
 
 const getCsrf = () => {
@@ -23,57 +23,37 @@ const getCsrf = () => {
 }
 
 
+const AuthPage = () => {
+    
+    return (
+        <main>
+            <Redirect to='/auth' />
+            <Route path='/auth/register'>
+                register
+            </Route>
+            <Route path='/auth/login'>
+                Login
+            </Route>
+            <Route exact path="/auth">
+                <Link to='/auth/register'>REGISTER</Link>
+                <Link to='/auth/login'>LOGIN</Link>
+            </Route>           
+        </main>
+    )
+}
+
 
 const LoginPage = () => {
-    const [message, setMessage] = useState('')
-    const {setUser} = useContext(userContext)
-    const history = useHistory()
-    const [disabled, setDisabled] = useState(false)
     
-    const login = async e => {
-        e.preventDefault()
-        setMessage('')
-        setDisabled(true)
-        const response = await fetch(`${baseUrl}/auth/login/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'X-CSRFToken': getCsrf()
-            },
-            body: JSON.stringify({
-                username: e.target.username.value,
-                password: e.target.password.value
-            })
-        })
-        if (response.status === 200) {
-            const data = await response.json()
-            setUser(data)
-            history.push('/')
-        }
-        else {
-            setMessage('something went wrong, please try again')
-            setDisabled(false)
-        }
-    }
-
     return (
-        <div className='auth-page'>
-            <h3>Login</h3>
-            <form onSubmit={login}>
-                <label>
-                    Username:
-                    <input type='text' name='username' placeholder='username' disabled={disabled} required/>
-                </label>
-
-                <label>
-                    Password:
-                    <input type='password' name='password' placeholder='password' disabled={disabled} required/>
-                </label>
-
-                <button type='submit' disabled={disabled}>Login</button>
+        <>
+            <form>
+                <input type='email' />
+                <input type='password' placeholder="password" />
+                <button>LOGIN</button>
             </form>
-            <small>{message}</small>
-        </div>
+            <Link to="/auth/register">register</Link>
+        </>
     )
 }
 

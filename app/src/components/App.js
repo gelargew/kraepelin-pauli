@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
+import { AuthPage } from './Auth'
 import { Dashboard, Practice } from './Dashboard'
 import { Kraepelin } from './Kraepelin'
 import { Result } from './Result'
@@ -56,8 +57,8 @@ const App = () => {
     return (
     <userContext.Provider value={{user, setUser}}>
         <ToggleTheme />
-        <button onClick={() => console.log(user)}>USER</button>
         <BrowserRouter>
+        {user.is_authenticated ?       
             <Switch>
                 <Route path='/kraepelin'>
                     <Kraepelin />
@@ -81,9 +82,16 @@ const App = () => {
                     <Dashboard />
                 </Route>
             </Switch>
+            :
+            <AuthPage />
+        }
         </BrowserRouter>
     </userContext.Provider>
     )
+}
+
+const userReducer = (state, action) => {
+    pass
 }
 
 
