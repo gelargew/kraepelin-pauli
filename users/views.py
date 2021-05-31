@@ -58,6 +58,7 @@ def user_register(request):
         True
         )
     user.save()
+    print(user.auth_token)
 
     return JsonResponse(data, status=201)
 
@@ -68,13 +69,25 @@ def user_activate(request):
 
     data = json.loads(request.body)
     try:
+        password = data.pop('password')
+    except KeyError:
+        password = None
+    try:
         user = User.objects.get(**data)
-        user.activate()
-        user.auth_token = None
+        if password and user.is_active:
+            user.set_password(password)
+            user.auth_token = None
+            user.save()
+            return JsonResponse(UserSerializer(user).data, status=201)
+        else:
+            user.is_active = True
+            user.save()
+            return HttpResponse(status=200)
+        
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
 
-    return JsonResponse(UserSerializer(user), status=200)
+    
 
 def user_logout(request):
     logout(request)

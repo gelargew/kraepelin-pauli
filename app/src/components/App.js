@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { BrowserRouter, Link, Switch, Route } from 'react-router-dom'
 import { AuthPage } from './Auth'
 import { Dashboard, Practice } from './Dashboard'
-import { useFetch } from './hooks'
+import { useFetchReducer } from './hooks'
 import { Kraepelin } from './Kraepelin'
 import { userReducer } from './reducers'
 import { Result } from './Result'
@@ -14,7 +14,7 @@ export const userContext = createContext()
 
 
 const App = () => {
-    const [user, dispatchUser, responseStatus] = useFetch({}, userReducer)
+    const [user, dispatchUser, responseStatus] = useFetchReducer({}, userReducer)
 
     useEffect(async () => {
         dispatchUser({ type: 'fetchCurrentUser'})

@@ -3,16 +3,18 @@ import { getCsrf } from './utils'
 
 export {userReducer}
 
-const userReducer = (context, action) => {
+const userReducer = (state, action) => {
+    let stateWrapper = {}
     switch(action.type) {
         case 'fetchCurrentUser':
-            return [
+            stateWrapper.context = [
                 `${baseUrl}/api/auth/current_user/`,{
                     method: 'GET'
                 }
             ]
+            break
         case 'login':
-            return [
+            stateWrapper.context = [
                 `${baseUrl}/api/auth/login/`, {
                     method: 'POST',
                     headers: {
@@ -22,8 +24,9 @@ const userReducer = (context, action) => {
                     body: JSON.stringify(action.data)
                 }
             ]
+            break
         case 'register':
-            return [
+            stateWrapper.context = [
                 `${baseUrl}/api/auth/register/`, {
                     method: 'POST',
                     headers: {
@@ -33,8 +36,10 @@ const userReducer = (context, action) => {
                     body: JSON.stringify(action.data)
                 }
             ]
+            break
         case 'activate':
-            return [
+            console.log(action)
+            stateWrapper.context = [
                 `${baseUrl}/api/auth/activate/`, {
                     method: 'PATCH',
                     headers: {
@@ -44,5 +49,12 @@ const userReducer = (context, action) => {
                     body: JSON.stringify(action.data)
                 }
             ]
-    }  
+            stateWrapper.timestamp = new Date
+            break
+    }
+    if ('perform' in action) stateWrapper.perform = action.perform
+    if ('performError' in action) stateWrapper.performError = action.performError
+
+    return stateWrapper
 }
+

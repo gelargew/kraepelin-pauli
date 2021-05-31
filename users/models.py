@@ -26,7 +26,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=100, unique=True)
     is_premium = models.BooleanField(default=False)
     room_owner_privileges = models.IntegerField(default=0, blank=True)
-    auth_token = models.CharField(max_length=10, default=generate_auth_token, editable=False)
+    auth_token = models.CharField(max_length=10, default=generate_auth_token, editable=False, null=True, blank=True)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

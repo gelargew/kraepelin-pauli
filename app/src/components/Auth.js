@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, Redirect, Route, useHistory } from 'react-router-dom';
 import { baseUrl, userContext } from './App';
 
@@ -73,7 +73,7 @@ const LoginPage = () => {
 
 
 const RegisterPage = () => {
-    const {user, dispatchUser, responseStatus} = useContext(userContext)
+    const {dispatchUser} = useContext(userContext)
     const history = useHistory()
     const handleRegister = e => {
         e.preventDefault()  
@@ -96,23 +96,42 @@ const RegisterPage = () => {
 
 const ActivatePage = () => {
     const {user, dispatchUser} = useContext(userContext)
+    const [passwordPage, setPasswordPage] = useState(false)
 
     const handleActivate = e => {
+        console.log(passwordPage)
         e.preventDefault()
         dispatchUser({
             type: 'activate',
             data: {
-                email: user.email,
+                email: e.target.email.value,
+                auth_token: e.target.token.value
+            },
+            perform: status => status === 200 && setPasswordPage(true)
+        })
+    }
+    const handleCreate = e => {
+        e.preventDefault()
+        dispatchUser({
+            type: 'activate',
+            data: {
+                email: e.target.email.value,
+                password: e.target.password.value,
                 auth_token: e.target.token.value
             }
         })
     }
 
-    return (
-        <form onSubmit={handleActivate}>
+    return (    
+        <form onSubmit={passwordPage ? handleCreate : handleActivate}>
             <input name='email' type='email' value={user.email} disabled readOnly />
-            <input name='token' />
-            <button>Activate account</button>
+            <input name='token' disabled={passwordPage}/>
+            {passwordPage && 
+            <>
+                <input type="password" name="password" />
+                <input type="password" />
+            </>}
+            <button>{passwordPage ? 'Create account' : 'Confirm token'}</button>
         </form>
     )
 }
