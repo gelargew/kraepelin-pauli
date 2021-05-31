@@ -1,4 +1,5 @@
 import json
+from django.core.mail import send_mail
 from django.http.response import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ObjectDoesNotExist
@@ -48,6 +49,14 @@ def user_register(request):
 
     user.is_active = False
     user.refresh_token()
+    email_body = f'your authentication token is {user.auth_token}'
+    send_mail(
+        'Verify your account', 
+        email_body,
+        'kraepelin_pauli@rustmail.com',
+        [data['email']],
+        True
+        )
     user.save()
 
     return JsonResponse(data, status=201)
@@ -61,10 +70,11 @@ def user_activate(request):
     try:
         user = User.objects.get(**data)
         user.activate()
-        print(user)
+        user.auth_token = None
     except ObjectDoesNotExist:
         return HttpResponse(status=404)
 
+    return JsonResponse(UserSerializer(user), status=200)
 
 def user_logout(request):
     logout(request)

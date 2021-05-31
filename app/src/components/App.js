@@ -14,7 +14,7 @@ export const userContext = createContext()
 
 
 const App = () => {
-    const [user, dispatchUser] = useFetch({}, userReducer)
+    const [user, dispatchUser, responseStatus] = useFetch({}, userReducer)
 
     useEffect(async () => {
         dispatchUser({ type: 'fetchCurrentUser'})
@@ -22,7 +22,7 @@ const App = () => {
     }, [])
 
     return (
-    <userContext.Provider value={{user, dispatchUser}}>
+    <userContext.Provider value={{user, dispatchUser, responseStatus}}>
         <ToggleTheme />
         <button onClick={() => console.log(user)}>USER</button>
         <BrowserRouter>

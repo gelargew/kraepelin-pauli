@@ -34,6 +34,9 @@ const AuthPage = () => {
             <Route path='/auth/login'>
                 <LoginPage />
             </Route>
+            <Route path='/auth/activate'>
+                <ActivatePage />
+            </Route>
             <Route exact path="/auth">
                 <Link to='/auth/register'>REGISTER</Link>
                 <Link to='/auth/login'>LOGIN</Link>
@@ -70,16 +73,30 @@ const LoginPage = () => {
 
 
 const RegisterPage = () => {
-    const {user, dispatchUser} = useContext(userContext)
+    const {user, dispatchUser, responseStatus} = useContext(userContext)
+    const history = useHistory()
     const handleRegister = e => {
-        e.preventDefault()
+        e.preventDefault()  
         dispatchUser({
             type: 'register',
             data: {
                 email: e.target.email.value
-            }
+            },
+            perform: () => history.push('/auth/activate/')
         })
     }
+
+    return (
+        <form onSubmit={handleRegister}>
+            <input name='email' type='email' />
+            <button>Register</button>
+        </form>
+    )
+}
+
+const ActivatePage = () => {
+    const {user, dispatchUser} = useContext(userContext)
+
     const handleActivate = e => {
         e.preventDefault()
         dispatchUser({
@@ -92,34 +109,10 @@ const RegisterPage = () => {
     }
 
     return (
-        <>
-            {user.email ?
-                <form onSubmit={handleActivate}>
-                    <input name='email' type='email' value={user.email} disabled />
-                    <input name='token' />
-                    <button>Activate account</button>
-                </form>
-                :
-                <form onSubmit={handleRegister}>
-                    <input name='email' type='email' />
-                    <button>Register</button>
-                </form>}
-        </>
+        <form onSubmit={handleActivate}>
+            <input name='email' type='email' value={user.email} disabled readOnly />
+            <input name='token' />
+            <button>Activate account</button>
+        </form>
     )
-}
-
-
-const handleAuth = async (e, type='login', body) => {
-    e.preventDefault()
-    const response = await fetch(`${baseUrl}/auth/${type}/`, {
-        method: 'POST',
-        mode: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'X-CSRFToken': getCsrf()
-        },
-        body: body
-    })
-    return response
-
 }
