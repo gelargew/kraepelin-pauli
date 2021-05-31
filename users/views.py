@@ -78,6 +78,7 @@ def user_activate(request):
             user.set_password(password)
             user.auth_token = None
             user.save()
+            login(request, user)
             return JsonResponse(UserSerializer(user).data, status=201)
         else:
             user.is_active = True
@@ -94,3 +95,15 @@ def user_logout(request):
 
     return JsonResponse(DummyUser, status=200)
 
+
+def update_user(request):
+    if request.method != 'PATCH' or not request.user.is_authenticated:
+        return HttpResponse(status=400)
+    
+    user = request.user
+    data = json.loads(request.body)
+    for key, val in data.items():
+        setattr(user, key, val)
+    user.save()
+
+    return JsonResponse(UserSerializer(user).data, status=200)

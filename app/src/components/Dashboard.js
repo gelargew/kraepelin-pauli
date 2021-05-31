@@ -1,36 +1,13 @@
 import React, { useContext, useReducer, useState } from 'react'
 import { Link, useHistory, Prompt } from 'react-router-dom'
 import { userContext } from './App'
+import { selectReducer } from './reducers'
 
 const numeralSystem = {
     latin: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
     hiragana: ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'],
     choices: ['latin', 'hiragana' ]
 }
-
-const selectReducer = (state, action) => {
-    const limit = state.limit ?? state.options.length
-    let i
-    switch(action) {
-        case 'moveRight':
-            i = state.idx < limit - state.spaces ? state.idx + state.spaces : 0
-            return 'limit' in state ? {...state, idx: i}:
-            {...state, selected: state.options[i], idx: i}
-        case 'moveLeft':
-            console.log(action === 'moveLeft')
-            i = state.idx > 0 ? state.idx - state.spaces : limit - state.spaces
-            return 'limit' in state ? {...state, idx: i}:
-            {...state, selected: state.options[i], idx: i}
-        // case 'selected' in state:
-        //     return {...state, selected: state.options[i], idx: i}
-    
-    
-        default:
-            throw new Error()
-    }
-}
-
-
 
 export const Dashboard = () => {
 
@@ -132,40 +109,32 @@ export const Practice = () => {
     )
 }
 
-const useKraepelin = () => {
-    return
-}
+const SettingPage = () => {
+    const {user, dispatchUser} = useContext(userContext)
+    const [[first_name, last_name], setName] = useState([user.first_name, user.last_name])
 
-const useSelect = options => {
-    const [selected, setSelected] = useState(options[0])
-    let idx = 0
-    const left = () => {
-        idx--
-        if (idx < 0) {
-            idx = options.length - 1
-            return
-        }
-        setSelected(options[idx])       
-    }
-    const right = () => {
-        idx++
-        if (idx >= options.length + 1) {
-            idx = 0
-            return
-        }
-        setSelected(options[idx])
+    const changeFirstName = e => setName([e.target.value, last_name])
+    const changeLastName = e => setName([first_name, e.target.value])
+
+    const handleSubmit = e => {
+        e.preventDefault()
+        dispatchUser({
+            type: 'update',
+            data: {
+                first_name: first_name,
+                last_name: last_name,
+                password: e.target.password.value
+            }
+        })
     }
 
-    const Div = () => 
-    <div>
-        <button onClick={left}>
-            <i className="fas fa-caret-left fa-2x"></i>
-        </button>
-        <input disabled value={selected} />
-        <button onClick={right}>
-            <i className="fas fa-caret-right fa-2x"></i>
-        </button>
-    </div>
-
-    return [selected, Div]
+    return (
+        <form onSubmit={handleSubmit}>
+            <input name='email' value={user.email} disabled/>
+            <input name='firstname' value={user.firt_name} onChange={changeFirstName} />
+            <input name='lastname' value={user.last_name} onChange={changeLastName} />
+            <input type='password' name='password' onBlur={() => 'd'} />
+            <button>Save</button>
+        </form>
+    )
 }

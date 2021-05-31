@@ -1,7 +1,7 @@
 import { baseUrl } from './App'
 import { getCsrf } from './utils'
 
-export {userReducer}
+export {userReducer, selectReducer}
 
 const userReducer = (state, action) => {
     let stateWrapper = {}
@@ -56,5 +56,29 @@ const userReducer = (state, action) => {
     if ('performError' in action) stateWrapper.performError = action.performError
 
     return stateWrapper
+}
+
+
+
+const selectReducer = (state, action) => {
+    const limit = state.limit ?? state.options.length
+    let i
+    switch(action) {
+        case 'moveRight':
+            i = state.idx < limit - state.spaces ? state.idx + state.spaces : 0
+            return 'limit' in state ? {...state, idx: i}:
+            {...state, selected: state.options[i], idx: i}
+        case 'moveLeft':
+            console.log(action === 'moveLeft')
+            i = state.idx > 0 ? state.idx - state.spaces : limit - state.spaces
+            return 'limit' in state ? {...state, idx: i}:
+            {...state, selected: state.options[i], idx: i}
+        // case 'selected' in state:
+        //     return {...state, selected: state.options[i], idx: i}
+    
+    
+        default:
+            throw new Error()
+    }
 }
 
