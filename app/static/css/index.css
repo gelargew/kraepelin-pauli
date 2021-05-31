@@ -50,6 +50,7 @@ button, a, input {
     background: none;
     border-radius: 10px;
     text-decoration: none;
+    text-align: center;
 }
 
 .kraepelin {
@@ -135,6 +136,7 @@ button:hover {
 
 :disabled {
     color: var(--color-text-dim);
+    text-align: center;
 }
 
 .theme-toggler {
@@ -173,6 +175,13 @@ button:hover {
     height: 50%;
     width: 300px;
     place-self: center;
+}
+
+.dashboard form {
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    justify-content: space-around;
 }
 
 .setup-inputs {

@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
-
-export const ToggleTheme = () => {
-    const [dark, setDark] = useState(true)
+export { ToggleTheme }
+ 
+const ToggleTheme = ({darkTheme, setDarkTheme }) => {
     useEffect(() => {
-    console.log(dark)
-    document.querySelector('html').setAttribute('color-scheme', dark ? 'dark' : 'light')
-    },[dark])
+    document.querySelector('html').setAttribute('color-scheme', darkTheme ? 'dark' : 'light')
+    },[darkTheme])
 
     return (
     <input className='theme-toggler' type="checkbox" 
-    onChange={() => setDark(!dark)} title="Toggle color scheme" />
+    onChange={() => setDarkTheme(!darkTheme)} title="Toggle color scheme" />
         )
 }

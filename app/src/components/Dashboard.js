@@ -3,13 +3,15 @@ import { Link, useHistory, Prompt } from 'react-router-dom'
 import { userContext } from './App'
 import { selectReducer } from './reducers'
 
+export { Dashboard, InitPage, SettingPage }
+
 const numeralSystem = {
     latin: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
     hiragana: ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'],
     choices: ['latin', 'hiragana' ]
 }
 
-export const Dashboard = () => {
+const Dashboard = () => {
 
     return (    
         <main className="dashboard">
@@ -17,12 +19,13 @@ export const Dashboard = () => {
             <Link to="/practice">PRACTICE</Link>
             <Link to="/group" title="create a group test, display group results">GROUP</Link>
             <Link to="/history" title="your kraepelin results">HISTORY</Link>
+            <Link to='/account'>ACCOUNT</Link>
             <Link to="/contactus">contact us</Link>
         </main>
     )
 }
 
-export const Practice = () => {
+const InitPage = () => {
     const {user, setUser} = useContext(userContext)
     const [kraepelin, setKraepelin] = useState({
         length: 5000,
@@ -39,9 +42,6 @@ export const Practice = () => {
         spaces: 1,
         idx: 0
     })
-    
-
-
     return (
         <main className="dashboard">
             <small>length</small>
@@ -110,12 +110,10 @@ export const Practice = () => {
 }
 
 const SettingPage = () => {
-    const {user, dispatchUser} = useContext(userContext)
+    const {user, dispatchUser, setDarkTheme} = useContext(userContext)
     const [[first_name, last_name], setName] = useState([user.first_name, user.last_name])
-
     const changeFirstName = e => setName([e.target.value, last_name])
     const changeLastName = e => setName([first_name, e.target.value])
-
     const handleSubmit = e => {
         e.preventDefault()
         dispatchUser({
@@ -127,14 +125,24 @@ const SettingPage = () => {
             }
         })
     }
-
+    const togle = () => {
+        setDarkTheme(prev => {
+            console.log(prev)
+            return !prev
+        })
+    }
     return (
-        <form onSubmit={handleSubmit}>
-            <input name='email' value={user.email} disabled/>
-            <input name='firstname' value={user.firt_name} onChange={changeFirstName} />
-            <input name='lastname' value={user.last_name} onChange={changeLastName} />
-            <input type='password' name='password' onBlur={() => 'd'} />
-            <button>Save</button>
-        </form>
+        <main className='dashboard'>
+            <form onSubmit={handleSubmit}>
+                <button type='button' onClick={togle}>COLOR SCHEME</button>
+                <input name='email' value={user.email} disabled/>
+                <input name='firstname' value={user.firt_name} 
+                onChange={changeFirstName} placeholder='first name' title='first name'/>
+                <input name='lastname' value={user.last_name} 
+                onChange={changeLastName} placeholder='last name' title='last name' />
+                <input type='password' name='password' onBlur={() => 'd'} />
+                <button title='save your settings'>Save</button>
+            </form>
+        </main>
     )
 }
