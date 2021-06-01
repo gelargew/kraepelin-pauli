@@ -11,11 +11,12 @@ export const Kraepelin = () => {
     const [result, setResult] = useState(new Array(length).fill(0))
     const [position, setPosition] = useState(0)
     const [curNumbers, setCurNumbers] = useState(numbers.slice(0, columnCount))
+    const [inputDisabled, setInputDisabled] = useState(true)
+    const [timer, timesUp] = useTimer(time)
+    const {user} = useContext(userContext)
     const container = useRef(null)
     const kraepelinInputs = useRef(null)
-    const [inputDisabled, setInputDisabled] = useState(true)
-    const [timer, timesUp] = useTimer(5)
-    const {user} = useContext(userContext)
+    const submitButton = useRef(null)
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
@@ -72,6 +73,7 @@ export const Kraepelin = () => {
         setPosition(prev => prev - 1)
     }
     const handleDown = () => {
+        console.log('down')
         if (position >= length) {
             return false
         }
@@ -137,11 +139,12 @@ export const Kraepelin = () => {
             <Prompt message={(location, action) => 
             location.pathname.startsWith("/result") ? "Are you sure?" : "Are you sure you want to leave?"} />
 
-            <Link className='submitKraepelin' to={{
+            <Link ref={submitButton} className='submitKraepelin' to={{
                     pathname: "/result",
                     state: { result: result }
                 }} replace>
-                    submit
+                    <p>{timer}</p>
+                    SUBMIT
             </Link>
 
             <div className="timer">{timer}</div>

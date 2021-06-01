@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { render } from 'react-dom'
-import { BrowserRouter, Link, Switch, Route, useHistory, Redirect } from 'react-router-dom'
+import { BrowserRouter, Link, Switch, Route, useHistory, Redirect, useLocation } from 'react-router-dom'
 import { AuthPage } from './Auth'
 import { Dashboard, InitPage, SettingPage } from './Dashboard'
 import { useFetchReducer } from './hooks'
@@ -19,7 +19,7 @@ const App = () => {
 
     useEffect(async () => {
         dispatchUser({ type: 'fetchCurrentUser'})
-        console.log(user)
+        console.log(useLocation())
     }, [])
 
     return (
@@ -37,7 +37,7 @@ const App = () => {
                 <Route path='/account'>
                     <SettingPage />
                 </Route>
-                <Route path="/practice">
+                <Route path="/start">
                     <InitPage />
                 </Route>
                 <Route path="/group">

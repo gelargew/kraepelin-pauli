@@ -17,7 +17,7 @@ const Dashboard = () => {
         <main className="dashboard">
             <Redirect to='/'/>
             <Link to="/initiate">一</Link>
-            <Link to="/practice">PRACTICE</Link>
+            <Link to="/start">PRACTICE</Link>
             <Link to="/group" title="create a group test, display group results">GROUP</Link>
             <Link to="/history" title="your kraepelin results">HISTORY</Link>
             <Link to='/account'>ACCOUNT</Link>
@@ -36,7 +36,7 @@ const InitPage = () => {
         columnCount: 100
     })
     const [kLength, dispatchKLength] = useReducer(selectReducer, {limit: 8000, spaces: 100, idx: 5000})
-    const [kTime, dispatchKTime] = useReducer(selectReducer, {limit: 240, spaces: 10, idx: 0})
+    const [kTime, dispatchKTime] = useReducer(selectReducer, {limit: 120, spaces: 5, idx: 60})
     const [nm, dispatch] = useReducer(selectReducer, {
         selected: 'latin',
         options: ['latin', 'hiragana'],
@@ -46,25 +46,12 @@ const InitPage = () => {
     return (
         <main className="dashboard">
             <small>length</small>
-            {/* <div className="setup-inputs">
-                <button><i className="fas fa-caret-left fa-2x"></i></button>
-                <input type="number" value={kraepelin.length} disabled={!user.premium} 
-                onChange={e => setKraepelin({...kraepelin, length: e.target.value})} />
-                <button><i className="fas fa-caret-right fa-2x"></i></button>
-            </div> */}
 
             <div className="setup-inputs">
                 <button onMouseDown={() => dispatchKLength('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
                 <input readOnly value={kLength.idx} />
                 <button onClick={() => dispatchKLength('moveRight')}><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
-
-            {/* <div className="setup-inputs">
-                <button><i className="fas fa-caret-left fa-2x"></i></button>
-                <input type="number" value={kraepelin.time} disabled={!user.premium} 
-                onChange={e => setKraepelin({...kraepelin, time: e.target.value})} />
-                <button><i className="fas fa-caret-right fa-2x"></i></button>
-            </div> */}
 
             <div className="setup-inputs">
                 <button onMouseDown={() => dispatchKTime('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
@@ -78,19 +65,6 @@ const InitPage = () => {
                 <button><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
-            {/* <div className="setup-inputs">
-                <button onClick={() => 
-                    setNumberalChoice(prev => prev ? prev - 1 : numeralSystem.choices.length - 1)}>
-                    <i className="fas fa-caret-left fa-2x"></i>
-                </button>
-                <input onChange={e => setKraepelin({...kraepelin, numberFormat: numeralSystem[e.target.value]})} type="text" disabled 
-                value={numeralSystem.choices[numeralChoice]}/>
-                <button onClick={() => 
-                    setNumberalChoice(prev => prev + 1 < numeralSystem.choices.length ? prev + 1 : 0 )}>
-                    <i className="fas fa-caret-right fa-2x"></i>
-                </button>
-            </div> */}
-
             <div className="setup-inputs">
                 <button onClick={() => dispatch('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
                 <input readOnly value={nm.selected} />
@@ -101,16 +75,13 @@ const InitPage = () => {
                 pathname: "/kraepelin",
                 state:  {
                     length: kLength.idx,
-                    time: kTime.idx,
+                    time: kTime.idx*60,
                     numberFormat: numeralSystem[nm.selected],
                     columnCount: 100
                 }
-            }} title="start practice">
+            }} title="start" replace>
                 START
             </Link>
-            <Prompt message={(location, action) => 
-                console.log(action)
-            } />
         </main>
     )
 }
