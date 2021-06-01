@@ -1,5 +1,5 @@
-import React, { useContext, useReducer, useState } from 'react'
-import { Link, useHistory, Prompt } from 'react-router-dom'
+import React, { useContext, useEffect, useReducer, useState } from 'react'
+import { Link, useHistory, Prompt, Redirect } from 'react-router-dom'
 import { userContext } from './App'
 import { selectReducer } from './reducers'
 
@@ -15,6 +15,7 @@ const Dashboard = () => {
 
     return (    
         <main className="dashboard">
+            <Redirect to='/'/>
             <Link to="/initiate">一</Link>
             <Link to="/practice">PRACTICE</Link>
             <Link to="/group" title="create a group test, display group results">GROUP</Link>
@@ -98,7 +99,12 @@ const InitPage = () => {
 
             <Link to={{
                 pathname: "/kraepelin",
-                state:  kraepelin
+                state:  {
+                    length: kLength.idx,
+                    time: kTime.idx,
+                    numberFormat: numeralSystem[nm.selected],
+                    columnCount: 100
+                }
             }} title="start practice">
                 START
             </Link>
@@ -111,9 +117,11 @@ const InitPage = () => {
 
 const SettingPage = () => {
     const {user, dispatchUser, setDarkTheme} = useContext(userContext)
-    const [[first_name, last_name], setName] = useState([user.first_name, user.last_name])
+    const [[first_name, last_name], setName] = useState(['', ''])
+    useEffect(() => setName([user.first_name, user.last_name]), [user])
     const changeFirstName = e => setName([e.target.value, last_name])
     const changeLastName = e => setName([first_name, e.target.value])
+
     const handleSubmit = e => {
         e.preventDefault()
         dispatchUser({
@@ -125,23 +133,19 @@ const SettingPage = () => {
             }
         })
     }
-    const togle = () => {
-        setDarkTheme(prev => {
-            console.log(prev)
-            return !prev
-        })
-    }
+    
     return (
         <main className='dashboard'>
             <form onSubmit={handleSubmit}>
-                <button type='button' onClick={togle}>COLOR SCHEME</button>
+                <button type='button' onClick={() => setDarkTheme(dark => !dark)}>COLOR SCHEME</button>
                 <input name='email' value={user.email} disabled/>
-                <input name='firstname' value={user.firt_name} 
+                <input name='firstname' value={first_name} 
                 onChange={changeFirstName} placeholder='first name' title='first name'/>
-                <input name='lastname' value={user.last_name} 
+                <input name='lastname' value={last_name} 
                 onChange={changeLastName} placeholder='last name' title='last name' />
                 <input type='password' name='password' onBlur={() => 'd'} />
                 <button title='save your settings'>Save</button>
+                <button type='button' onClick={() => dispatchUser({type: 'logout'})}>LOGOUT</button>
             </form>
         </main>
     )

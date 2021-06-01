@@ -8,9 +8,7 @@ const userReducer = (state, action) => {
     switch(action.type) {
         case 'fetchCurrentUser':
             stateWrapper.context = [
-                `${baseUrl}/api/auth/current_user/`,{
-                    method: 'GET'
-                }
+                `${baseUrl}/api/auth/current_user/`
             ]
             break
         case 'login':
@@ -23,6 +21,11 @@ const userReducer = (state, action) => {
                     },
                     body: JSON.stringify(action.data)
                 }
+            ]
+            break
+        case 'logout':
+            stateWrapper.context = [
+                `${baseUrl}/api/auth/logout/`
             ]
             break
         case 'register':
@@ -51,6 +54,20 @@ const userReducer = (state, action) => {
             ]
             stateWrapper.timestamp = new Date
             break
+        case 'update':
+            stateWrapper.context = [
+                `${baseUrl}/api/auth/update/`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCsrf()
+                    },
+                    body: JSON.stringify(action.data)
+                }
+            ]
+            break
+        default:
+            throw new Error('fetch error')
     }
     if ('perform' in action) stateWrapper.perform = action.perform
     if ('performError' in action) stateWrapper.performError = action.performError

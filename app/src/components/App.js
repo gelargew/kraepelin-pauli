@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { render } from 'react-dom'
-import { BrowserRouter, Link, Switch, Route, useHistory } from 'react-router-dom'
+import { BrowserRouter, Link, Switch, Route, useHistory, Redirect } from 'react-router-dom'
 import { AuthPage } from './Auth'
 import { Dashboard, InitPage, SettingPage } from './Dashboard'
 import { useFetchReducer } from './hooks'
@@ -16,7 +16,6 @@ export const userContext = createContext()
 const App = () => {
     const [user, dispatchUser] = useFetchReducer({}, userReducer)
     const [darkTheme, setDarkTheme] = useState(true)
-    const history = useHistory()
 
     useEffect(async () => {
         dispatchUser({ type: 'fetchCurrentUser'})
@@ -25,7 +24,9 @@ const App = () => {
 
     return (
     <userContext.Provider value={{user, dispatchUser, setDarkTheme}}>
-        <button onClick={() => window.history.back()}>BACK</button>
+        <button className='back-button' onClick={() => window.history.back()}>
+            <i className='fas fa-arrow-left fa-2x'></i>
+        </button>
         <ToggleTheme darkTheme={darkTheme} setDarkTheme={setDarkTheme} />
         <BrowserRouter>
         {user.is_authenticated ?       
@@ -35,9 +36,6 @@ const App = () => {
                 </Route>
                 <Route path='/account'>
                     <SettingPage />
-                </Route>
-                <Route path="/initiate">
-                    <h1>initiate</h1>
                 </Route>
                 <Route path="/practice">
                     <InitPage />

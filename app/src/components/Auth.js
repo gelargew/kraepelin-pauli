@@ -24,22 +24,23 @@ const getCsrf = () => {
 
 
 const AuthPage = () => {
+    const {user} =useContext(userContext)
     
     return (
-        <main>
-            <Redirect to='/auth' />
-            <Route path='/auth/register'>
+        <main className="dashboard">
+            <Redirect to='/' />
+            <Route path='/register'>
                 <RegisterPage />
             </Route>
-            <Route path='/auth/login'>
+            <Route path='/login'>
                 <LoginPage />
             </Route>
-            <Route path='/auth/activate'>
+            <Route path='/activate'>
                 <ActivatePage />
             </Route>
-            <Route exact path="/auth">
-                <Link to='/auth/register'>REGISTER</Link>
-                <Link to='/auth/login'>LOGIN</Link>
+            <Route exact path="/">
+                <Link to='/register'>REGISTER</Link>
+                <Link to='/login'>LOGIN</Link>
             </Route>           
         </main>
     )
@@ -48,6 +49,7 @@ const AuthPage = () => {
 
 const LoginPage = () => {
     const {dispatchUser} = useContext(userContext)
+    const history = useHistory()
     const handleSubmit = e => {
         e.preventDefault()
         dispatchUser({
@@ -55,7 +57,7 @@ const LoginPage = () => {
             data: {
                 'email': e.target.email.value,
                 'password': e.target.password.value
-            }
+            },
         })
     }
     
@@ -66,7 +68,7 @@ const LoginPage = () => {
                 <input name='password' type='password' placeholder="password" />
                 <button>LOGIN</button>
             </form>
-            <Link to="/auth/register">register</Link>
+            <Link to="/register">register</Link>
         </>
     )
 }
@@ -82,7 +84,7 @@ const RegisterPage = () => {
             data: {
                 email: e.target.email.value
             },
-            perform: () => history.push('/auth/activate/')
+            perform: () => history.push('/activate')
         })
     }
 

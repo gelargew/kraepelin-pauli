@@ -30,7 +30,7 @@ html[color-scheme='light'] {
 body {
     color: var(--color-text-main);
     margin: 0;
-    font-family: 'Sawarabi Mincho';
+    font-family: 'Roboto';
     background: var(--color-bg-main);
     transition: 0.5s;
 }
@@ -60,6 +60,7 @@ button, a, input {
     place-items: center;
     height: 100%;
     flex-wrap: wrap;
+    font-family: 'Sawarabi Mincho, Roboto';
 }
 
 .kraepelin-inputs {
@@ -123,12 +124,12 @@ button, a, input {
     transition: 0.4s;
 }
 
-.flash, button:active {
+.flash, button:active, a:active {
     background: var(--color-bg-3);
     transition: 0s;
 }
 
-button:hover {
+button:hover, a:hover {
     background: var(--color-bg-2);
     color: var(--color-secondary);
     cursor: pointer;
@@ -157,6 +158,7 @@ button:hover {
     content: "";
     height: 100%;
     width: 50%;
+    left: 0;
     background: var(--color-bg-1);
     border-radius: 50%;
     position: absolute;
@@ -184,6 +186,10 @@ button:hover {
     justify-content: space-around;
 }
 
+.dashboard button, .dashboard a {
+    width: 90%;
+}
+
 .setup-inputs {
     display: flex;
     justify-content: space-around;
@@ -191,8 +197,8 @@ button:hover {
 }
 
 .setup-inputs input {
-    width: 60%;
-    text-align: center;
+    width: 100%;
+
 }
 
 .submitKraepelin {
@@ -206,4 +212,22 @@ button:hover {
     position: fixed;
     top: 20px;
     left: 20px;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    opacity: 0.2;
+    color: var(--color-text-dim);
+    transition: 0.5;
+}
+
+@keyframes woble {
+    from { transform: translateX(-30%);}
+    to { transform: translateX(70%);}
+}
+
+.back-button i:hover {
+    animation: woble 0.5s ease-out 0.4s alternate infinite;
 }

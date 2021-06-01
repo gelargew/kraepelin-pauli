@@ -96,12 +96,16 @@ def user_logout(request):
     return JsonResponse(DummyUser, status=200)
 
 
-def update_user(request):
+def user_update(request):
     if request.method != 'PATCH' or not request.user.is_authenticated:
         return HttpResponse(status=400)
     
     user = request.user
     data = json.loads(request.body)
+    try:
+        request.user.password == data.pop('password')
+    except:
+        return HttpResponse(status=400)
     for key, val in data.items():
         setattr(user, key, val)
     user.save()
