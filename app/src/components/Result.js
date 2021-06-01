@@ -25,8 +25,6 @@ export const Result = () => {
             }
         }
     }
-    useEffect(() => console.log(history), [])
-
     return (
         <main>
             <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>

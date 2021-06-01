@@ -101,7 +101,6 @@ const ActivatePage = () => {
     const [passwordPage, setPasswordPage] = useState(false)
 
     const handleActivate = e => {
-        console.log(passwordPage)
         e.preventDefault()
         dispatchUser({
             type: 'activate',

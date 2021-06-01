@@ -1,4 +1,7 @@
-export {getCsrf}
+export {getCsrf, getRandomInt, randomArray}
+
+const getRandomInt = (max=10) => Math.floor(Math.random() * max)
+const randomArray = ({max=10, length=50}) => [... new Array(length)].map(() => getRandomInt(max))
 
 const getCsrf = () => {
     const name = 'csrftoken'

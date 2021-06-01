@@ -19,7 +19,6 @@ const App = () => {
 
     useEffect(async () => {
         dispatchUser({ type: 'fetchCurrentUser'})
-        console.log(useLocation())
     }, [])
 
     return (

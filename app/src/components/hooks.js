@@ -1,6 +1,6 @@
 import { useState, useReducer, useEffect } from 'react'
 
-export { useFetchReducer }
+export { useFetchReducer, useTimer }
 
 const useFetchReducer = (initialState, reducer) => {
     const [state, setState] = useState(initialState)
@@ -11,16 +11,35 @@ const useFetchReducer = (initialState, reducer) => {
         if (!context) return
         try {
             const response = await fetch(...context)
-            perform && perform(response.status)
-            const data = await response.json()
-            setState(data)
+            if (typeof perform === 'function') perform(response.status)
+            try {
+                const data = await response.json()
+                setState(data)
+            }
+            catch (e) {
+                console.log('no data')
+            }
             //if need to do something after fetch success
         }
         
         catch (e) {
-            performError && performError()
+            if (typeof performError === 'function') performError()
         } 
     },[context, timestamp])
 
     return [state, dispatchContext]
+}
+
+const useTimer = (initialState, callback) => {
+    const [counter, setCounter] = useState(initialState)
+    const [timesUp, setTimesUp] = useState(false)
+    useEffect(() => {
+        if (counter > 0) setTimeout(() => setCounter(counter - 1), 1000) 
+        else {
+            setTimesUp(true)
+            if (typeof callback === 'function') callback()
+        }
+    }, [counter])
+
+    return [counter, timesUp]
 }

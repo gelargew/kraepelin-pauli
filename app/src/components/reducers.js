@@ -41,7 +41,6 @@ const userReducer = (state, action) => {
             ]
             break
         case 'activate':
-            console.log(action)
             stateWrapper.context = [
                 `${baseUrl}/api/auth/activate/`, {
                     method: 'PATCH',
@@ -86,7 +85,6 @@ const selectReducer = (state, action) => {
             return 'limit' in state ? {...state, idx: i}:
             {...state, selected: state.options[i], idx: i}
         case 'moveLeft':
-            console.log(action === 'moveLeft')
             i = state.idx > 0 ? state.idx - state.spaces : limit - state.spaces
             return 'limit' in state ? {...state, idx: i}:
             {...state, selected: state.options[i], idx: i}

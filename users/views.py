@@ -45,7 +45,7 @@ def user_register(request):
     print(data['email'])
     user, created = User.objects.get_or_create(email=data['email'])
     if not created and user.is_active:
-        return HttpResponse(status=400)
+        return HttpResponse(status=409)
 
     user.is_active = False
     user.refresh_token()

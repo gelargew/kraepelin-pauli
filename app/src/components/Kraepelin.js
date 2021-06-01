@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
 import {Link, Prompt, useLocation} from 'react-router-dom'
 import { baseUrl, userContext } from './App'
-import { getCsrf } from './utils'
+import { getCsrf, randomArray } from './utils'
+import { useTimer } from './hooks'
 
 // record position for every minute to create chart !!!!! also make radar chart
 export const Kraepelin = () => {
@@ -41,7 +42,6 @@ export const Kraepelin = () => {
         if (handleDown()) {
             setAnswers(prev => {
                 prev[position] = val
-                console.log(answers[position])
                 return prev
             })
             setResult(prev => {
@@ -73,7 +73,6 @@ export const Kraepelin = () => {
         setPosition(prev => prev - 1)
     }
     const handleDown = () => {
-        console.log('down')
         if (position >= length) {
             return false
         }
@@ -152,15 +151,3 @@ export const Kraepelin = () => {
     )
 }
 
-const useTimer = (initialState) => {
-    const [counter, setCounter] = useState(initialState)
-    const [timesUp, setTimesUp] = useState(false)
-    useEffect(() => {
-        counter > 0 ? setTimeout(() => setCounter(counter - 1), 1000) : setTimesUp(true)
-    }, [counter])
-
-    return [counter, timesUp]
-}
-
-const getRandomInt = (max=10) => Math.floor(Math.random() * max)
-const randomArray = ({max=10, length=50}) => [... new Array(length)].map(() => getRandomInt(max))
