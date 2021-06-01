@@ -25,7 +25,7 @@ export const Kraepelin = () => {
     }, [timesUp])
 
     useEffect( () => {
-        container.current.style.transform = `translateY(-${position % (curNumbers.length - 1)}00px)`
+        container.current.style.transform = `translateY(-${position % (curNumbers.length - 1)*11}0px)`
         if (position >= length) {
             setPosition(0)
             setCurNumbers(numbers.slice(0, columnCount))
@@ -145,8 +145,7 @@ export const Kraepelin = () => {
                     <p>{timer}</p>
                     SUBMIT
             </Link>
-
-            <div className="timer">{timer}</div>
+            
         </div>
     )
 }

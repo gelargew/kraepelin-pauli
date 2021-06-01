@@ -27,14 +27,6 @@ const Dashboard = () => {
 }
 
 const InitPage = () => {
-    const {user, setUser} = useContext(userContext)
-    const [kraepelin, setKraepelin] = useState({
-        length: 5000,
-        time: 120,
-        operation: "addition",
-        numberFormat: "latin",
-        columnCount: 100
-    })
     const [kLength, dispatchKLength] = useReducer(selectReducer, {limit: 8000, spaces: 100, idx: 5000})
     const [kTime, dispatchKTime] = useReducer(selectReducer, {limit: 120, spaces: 5, idx: 60})
     const [nm, dispatch] = useReducer(selectReducer, {
@@ -45,14 +37,15 @@ const InitPage = () => {
     })
     return (
         <main className="dashboard">
-            <small>length</small>
 
+            <small>length</small>
             <div className="setup-inputs">
                 <button onMouseDown={() => dispatchKLength('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
                 <input readOnly value={kLength.idx} />
                 <button onClick={() => dispatchKLength('moveRight')}><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
+            <small>time limit</small>
             <div className="setup-inputs">
                 <button onMouseDown={() => dispatchKTime('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
                 <input readOnly value={kTime.idx} />
@@ -60,9 +53,9 @@ const InitPage = () => {
             </div>
 
             <div className="setup-inputs">
-                <button><i className="fas fa-caret-left fa-2x"></i></button>
-                <input type="text" disabled value={kraepelin.operation} />
-                <button><i className="fas fa-caret-right fa-2x"></i></button>
+                <button disabled><i className="fas fa-caret-left fa-2x"></i></button>
+                <input disabled type="text" value='addition'/>
+                <button disabled><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
             <div className="setup-inputs">

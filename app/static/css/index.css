@@ -1,18 +1,19 @@
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-bg-main: #121212;
-        --color-bg-1: #212121;
-        --color-bg-2: #303030;
-        --color-bg-3: #424242;
-        --color-text-main: #fff;
-        --color-text-secondary: rgba(255, 255, 255, 0.699);
-        --color-text-dim: rgba(255, 255, 255, 0.5);
-        --color-accent: greenyellow;
-        --color-primary: #BB86FC;
-        --color-secondary: #03DAC5;
 
-    }
+:root {
+    --color-bg-main: #121212;
+    --color-bg-1: #212121;
+    --color-bg-2: #303030;
+    --color-bg-3: #424242;
+    --color-text-main: #fff;
+    --color-text-secondary: rgba(255, 255, 255, 0.699);
+    --color-text-dim: rgba(255, 255, 255, 0.5);
+    --color-accent: greenyellow;
+    --color-primary: #BB86FC;
+    --color-secondary: #03DAC5;
+    --color-alert: rgb(255, 145, 145);
+
 }
+
 
 html[color-scheme='light'] {
     --color-bg-main: #fff;
@@ -40,6 +41,10 @@ body {
     flex-direction: column;
     justify-content: space-around;
     height: 100vh;
+}
+
+small {
+    color: var(--color-text-dim)
 }
 
 button, a, input {
@@ -80,7 +85,7 @@ button, a, input {
 }
 
 .kraepelin-numbers {
-    padding-top: 108px;
+    padding-top: 110px;
     display: flex;
     flex-direction: column;
     transition: 0.4s;
@@ -90,7 +95,7 @@ button, a, input {
 .kraepelin-numbers li {
     font-size: x-large;
     width: 100px;
-    height: 100px;
+    height: 110px;
     position: relative;
     margin: 0;
     transition: 0.6s;
@@ -101,6 +106,8 @@ button, a, input {
 .kraepelin-numbers li p {
     color: var(--color-text-secondary);
 }
+
+
 
 .container {
     height: 350px;
@@ -129,7 +136,7 @@ button, a, input {
     transition: 0s;
 }
 
-button:hover, a:hover {
+button:not(:disabled):hover, a:not(:disabled):hover {
     background: var(--color-bg-2);
     color: var(--color-secondary);
     cursor: pointer;
@@ -190,6 +197,10 @@ button:hover, a:hover {
     width: 90%;
 }
 
+.dashboard small {
+    transform: translateY(15px);
+}
+
 .setup-inputs {
     display: flex;
     justify-content: space-around;
@@ -198,14 +209,20 @@ button:hover, a:hover {
 
 .setup-inputs input {
     width: 100%;
-
 }
 
 .submitKraepelin {
+    font-size: large;
     position: fixed;
-    top: 60px;
+    top: 25%;
     left: 50%;
-    transform: translateX(80px);
+    transform: translateX(-190%);
+}
+
+.submitKraepelin p {
+    color: var(--color-text-dim);
+    margin: 0;
+    font-size: small;
 }
 
 .timer {
