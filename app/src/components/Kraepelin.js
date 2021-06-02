@@ -6,23 +6,22 @@ import { useTimer } from './hooks'
 
 // record position for every minute to create chart !!!!! also make radar chart
 export const Kraepelin = () => {
-    const {length, numberFormat, columnCount, time} = useLocation().state
+    const {length, numberFormat, numberFormatString, columnCount, time} = useLocation().state
     const [numbers , setNumbers] = useState(randomArray({length: length + 1}))
     const [answers, setAnswers] = useState(new Array(length).fill(''))
     const [result, setResult] = useState(new Array(length).fill(0))
     const [position, setPosition] = useState(0)
     const [curNumbers, setCurNumbers] = useState(numbers.slice(0, columnCount))
     const [inputDisabled, setInputDisabled] = useState(true)
-    const [timer, timesUp] = useTimer(time)
     const {user} = useContext(userContext)
     const container = useRef(null)
     const kraepelinInputs = useRef(null)
     const submitButton = useRef(null)
+    const [timer, timesUp] = useTimer(time, () => submitButton.current.click())
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
-        handleSubmit()
-    }, [timesUp])
+    }, [])
 
     useEffect( () => {
         container.current.style.transform = `translateY(-${position % (curNumbers.length - 1)*11}0px)`
@@ -83,12 +82,13 @@ export const Kraepelin = () => {
     const handleSubmit = async () => {
         const context = {
             user: user.id,
-            timeleft: 20,
-            numeral_system: numberFormat,
+            timeleft: timer,
+            numeral_system: numberFormatString,
             results: result.toString(),
             answers: answers.toString(),
             numbers: numbers.toString()
         }
+        console.log(context)
         const response = await fetch(`${baseUrl}/api/kraepelin/`, {
             method: 'POST',
             headers: {
@@ -135,17 +135,17 @@ export const Kraepelin = () => {
                 </button>
             </div>
 
-            <Prompt message={(location, action) => 
-            location.pathname.startsWith("/result") ? "Are you sure?" : "Are you sure you want to leave?"} />
+            <Prompt when={time < 30}  message={(location, action) => 
+            location.pathname.startsWith("/result") ? "Are you sure?" : "Are you sure you want to leave?"}/>
 
-            <Link ref={submitButton} className='submitKraepelin' to={{
+            <Link onClick={handleSubmit} ref={submitButton} className='submitKraepelin' to={{
                     pathname: "/result",
                     state: { result: result }
                 }} replace>
                     <p>{timer}</p>
                     SUBMIT
             </Link>
-            
+
         </div>
     )
 }

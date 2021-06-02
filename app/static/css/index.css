@@ -43,6 +43,18 @@ body {
     height: 100vh;
 }
 
+@keyframes woble {
+    0% { transform: translateX(0%);}
+    20% { transform: translateX(-30%);}
+    100% { transform: translateX(70%);}
+}
+
+@keyframes hovered {
+    50% {transform: translate(-20%, -70%);}
+    70% {transform: translate(0, 0)}
+    100% {transform: translate(20%, 30%)}
+}
+
 small {
     color: var(--color-text-dim)
 }
@@ -202,9 +214,8 @@ button:not(:disabled):hover, a:not(:disabled):hover {
 }
 
 .setup-inputs {
-    display: flex;
-    justify-content: space-around;
-    
+    display: grid;
+    grid-template-columns: minmax(60px, auto) minmax(200px, auto) minmax(60px, auto);  
 }
 
 .setup-inputs input {
@@ -240,11 +251,13 @@ button:not(:disabled):hover, a:not(:disabled):hover {
     transition: 0.5;
 }
 
-@keyframes woble {
-    from { transform: translateX(-30%);}
-    to { transform: translateX(70%);}
-}
+
 
 .back-button i:hover {
     animation: woble 0.5s ease-out 0.4s alternate infinite;
+}
+
+.result-page {
+    height: 90vh;
+    width: 90vw;
 }

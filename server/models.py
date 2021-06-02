@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
+from django.core.validators import int_list_validator, validate_comma_separated_integer_list
 from django.utils import timezone
 
 from datetime import timedelta
@@ -41,7 +41,7 @@ class Kraepelin(models.Model):
     numeral_system = models.CharField(choices=NUMERAL_SYSTEM_CHOICES, default='latin', max_length=32)
     numbers = models.CharField(validators=[validate_comma_separated_integer_list], blank=True, null=True, max_length=30000)
     answers = models.CharField(max_length=30000)
-    results = models.CharField(validators=[validate_comma_separated_integer_list], max_length=30000)
+    results = models.CharField(validators=[int_list_validator(',', allow_negative=True)], max_length=30000)
     status = models.CharField(choices=STATUS_CHOICES, default='active', max_length=32)
     room = models.ForeignKey(Room, on_delete=models.RESTRICT, null=True, blank=True)
 

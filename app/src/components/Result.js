@@ -23,13 +23,14 @@ export const Result = () => {
             arc: {
                 borderWidth: 0
             }
-        }
+        },
+        width: '200',
+        height: '200'
     }
     return (
-        <main>
+        <main className='result-page'>
             <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
             <Pie className="pie-chart" data={pieData} options={pieOptions}/>
-            <Link to="/">back</Link>
         </main>
     )
 }
@@ -71,7 +72,7 @@ const formatData = (result, columnCount = 100) => {
     const pieData = {
         datasets: [
             {
-                data: [correct.length, wrongs.length, empty.length],
+                data: [correct.length/result.length, wrongs.length/result.length, empty.length/result.length],
                 backgroundColor: ['green', 'red', 'yellow']
             }
         ],

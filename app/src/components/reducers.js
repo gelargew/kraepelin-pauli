@@ -89,11 +89,9 @@ const selectReducer = (state, action) => {
             return 'limit' in state ? {...state, idx: i}:
             {...state, selected: state.options[i], idx: i}
         // case 'selected' in state:
-        //     return {...state, selected: state.options[i], idx: i}
-    
-    
+        //     return {...state, selected: state.options[i], idx: i} 
         default:
-            throw new Error()
+            return {...state, idx: action > state.limit ? state.limit : action}
     }
 }
 

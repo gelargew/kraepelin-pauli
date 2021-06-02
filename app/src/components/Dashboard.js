@@ -16,10 +16,9 @@ const Dashboard = () => {
     return (    
         <main className="dashboard">
             <Redirect to='/'/>
-            <Link to="/initiate">一</Link>
-            <Link to="/start">PRACTICE</Link>
-            <Link to="/group" title="create a group test, display group results">GROUP</Link>
-            <Link to="/history" title="your kraepelin results">HISTORY</Link>
+            <Link to="/start">START</Link>
+            <button to="/group" title="create a group test, display group results" disabled>GROUP</button>
+            <button to="/history" title="your kraepelin results" disabled>HISTORY</button>
             <Link to='/account'>ACCOUNT</Link>
             <Link to="/contactus">contact us</Link>
         </main>
@@ -27,7 +26,7 @@ const Dashboard = () => {
 }
 
 const InitPage = () => {
-    const [kLength, dispatchKLength] = useReducer(selectReducer, {limit: 8000, spaces: 100, idx: 5000})
+    const [kLength, dispatchKLength] = useReducer(selectReducer, {limit: 8000, spaces: 100, idx: 100})
     const [kTime, dispatchKTime] = useReducer(selectReducer, {limit: 120, spaces: 5, idx: 60})
     const [nm, dispatch] = useReducer(selectReducer, {
         selected: 'latin',
@@ -41,14 +40,16 @@ const InitPage = () => {
             <small>length</small>
             <div className="setup-inputs">
                 <button onMouseDown={() => dispatchKLength('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
-                <input readOnly value={kLength.idx} />
+                <input type='number' onChange={e => dispatchKLength(e.target.value)} 
+                value={kLength.idx} min='0' max={kLength.limit} />
                 <button onClick={() => dispatchKLength('moveRight')}><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
             <small>time limit</small>
             <div className="setup-inputs">
                 <button onMouseDown={() => dispatchKTime('moveLeft')}><i className="fas fa-caret-left fa-2x"></i></button>
-                <input readOnly value={kTime.idx} />
+                <input type='number' onChange={e => dispatchKTime(e.target.value)} value={kTime.idx}
+                min='0' max={kTime.limit} />
                 <button onClick={() => dispatchKTime('moveRight')}><i className="fas fa-caret-right fa-2x"></i></button>
             </div>
 
@@ -70,6 +71,7 @@ const InitPage = () => {
                     length: kLength.idx,
                     time: kTime.idx*60,
                     numberFormat: numeralSystem[nm.selected],
+                    numberFormatString: nm.selected,
                     columnCount: 100
                 }
             }} title="start" replace>
@@ -99,18 +101,18 @@ const SettingPage = () => {
     }
     
     return (
-        <main className='dashboard'>
-            <form onSubmit={handleSubmit}>
-                <button type='button' onClick={() => setDarkTheme(dark => !dark)}>COLOR SCHEME</button>
-                <input name='email' value={user.email} disabled/>
-                <input name='firstname' value={first_name} 
-                onChange={changeFirstName} placeholder='first name' title='first name'/>
-                <input name='lastname' value={last_name} 
-                onChange={changeLastName} placeholder='last name' title='last name' />
-                <input type='password' name='password' onBlur={() => 'd'} />
-                <button title='save your settings'>Save</button>
-                <button type='button' onClick={() => dispatchUser({type: 'logout'})}>LOGOUT</button>
-            </form>
-        </main>
-    )
+ 
+        <form className="dashboard" onSubmit={handleSubmit}>
+            <button type='button' onClick={() => setDarkTheme(dark => !dark)}>COLOR SCHEME</button>
+            <input name='email' value={user.email} disabled/>
+            <input name='firstname' value={first_name} 
+            onChange={changeFirstName} placeholder='first name' title='first name'/>
+            <input name='lastname' value={last_name} 
+            onChange={changeLastName} placeholder='last name' title='last name' />
+            <input type='password' name='password' onBlur={() => 'd'} />
+            <button title='save your settings'>Save</button>
+            <button type='button' onClick={() => dispatchUser({type: 'logout'})}>LOGOUT</button>
+        </form>
+    
+)
 }
