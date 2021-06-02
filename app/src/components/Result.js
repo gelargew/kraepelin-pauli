@@ -5,16 +5,22 @@ import { useHistory, useLocation, Link } from 'react-router-dom'
 
 export const Result = () => {
     const history = useHistory()
-    const {result} = useLocation().state
-    const {scatterData, pieData} = formatData(result)
+    const data = useLocation().state
+    const {scatterData, pieData} = formatData(data.results)
     const scatterOptions = {
         parsing: false,
         animation: false,
         scales: {
-            xAxes: {
+            x: {
+                min: 1,
                 ticks: {
+                    beginAtZero: false,
                     padding: 0
                 }
+            },
+            y: {
+                min: 1,
+                display: false
             }
         }
     }
@@ -24,13 +30,16 @@ export const Result = () => {
                 borderWidth: 0
             }
         },
-        width: '200',
-        height: '200'
     }
     return (
         <main className='result-page'>
-            <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
-            <Pie className="pie-chart" data={pieData} options={pieOptions}/>
+            <button onClick={() => console.log(data)}>showdata</button>
+            <div className='scatter-chart-wrapper'>
+                <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
+            </div>
+            <div className='scatter-chart-wrapper'>
+                <Pie className="pie-chart" data={pieData} options={pieOptions}/>
+            </div>
         </main>
     )
 }
@@ -43,8 +52,8 @@ const formatData = (result, columnCount = 100) => {
     for (let i = 0; i < result.length; i++) {
         const val = result[i]      
         const xy = {
-            x: parseInt(i / columnCount),
-            y: i % columnCount
+            x: parseInt(i / columnCount) + 1,
+            y: i % columnCount + 1
         }
         if (val === 1) correct.push(xy)
         else if (val === -1) wrongs.push(xy)
@@ -72,7 +81,7 @@ const formatData = (result, columnCount = 100) => {
     const pieData = {
         datasets: [
             {
-                data: [correct.length/result.length, wrongs.length/result.length, empty.length/result.length],
+                data: [correct.length, wrongs.length, empty.length],
                 backgroundColor: ['green', 'red', 'yellow']
             }
         ],

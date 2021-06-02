@@ -258,6 +258,17 @@ button:not(:disabled):hover, a:not(:disabled):hover {
 }
 
 .result-page {
-    height: 90vh;
-    width: 90vw;
+    display: flex;
+    flex-wrap: wrap;
 }
+
+.pie-chart-wrapper {
+    width: 200px;
+    height: 200px;
+}
+
+.scatter-chart-wrapper {
+    width: 300px;
+    height: 250px;
+}
+

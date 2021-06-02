@@ -91,7 +91,13 @@ const selectReducer = (state, action) => {
         // case 'selected' in state:
         //     return {...state, selected: state.options[i], idx: i} 
         default:
-            return {...state, idx: action > state.limit ? state.limit : action}
+            try {
+                i = parseInt(action)
+                return {...state, idx: i > state.limit ? state.limit : i}
+            }
+            catch(e) {
+                return state
+            }          
     }
 }
 

@@ -78,7 +78,9 @@ export const Kraepelin = () => {
         setPosition(prev => prev + 1)
         return true
     }
-
+    const context = () => {
+        return 
+    }
     const handleSubmit = async () => {
         const context = {
             user: user.id,
@@ -88,7 +90,6 @@ export const Kraepelin = () => {
             answers: answers.toString(),
             numbers: numbers.toString()
         }
-        console.log(context)
         const response = await fetch(`${baseUrl}/api/kraepelin/`, {
             method: 'POST',
             headers: {
@@ -97,9 +98,7 @@ export const Kraepelin = () => {
             },
             body: JSON.stringify(context)
         })
-        console.log(response)
         const data = await response.json()
-        console.log(data)
     }
 
 
@@ -140,7 +139,14 @@ export const Kraepelin = () => {
 
             <Link onClick={handleSubmit} ref={submitButton} className='submitKraepelin' to={{
                     pathname: "/result",
-                    state: { result: result }
+                    state: {
+                        user: user.id,
+                        timeleft: timer,
+                        numeral_system: numberFormatString,
+                        results: result,
+                        answers: answers,
+                        numbers: numbers
+                    }
                 }} replace>
                     <p>{timer}</p>
                     SUBMIT
