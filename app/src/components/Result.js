@@ -67,7 +67,9 @@ export const Result = () => {
                 </p>
             </div>
             <div className='scatter-chart-wrapper'>
-                <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
+                <div>
+                    <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
+                </div>
             </div>
         </main>
     )

@@ -15,12 +15,13 @@ const Dashboard = () => {
 
     return (    
         <main className="dashboard">
+            <h1 className='logo'>KPauli</h1>
             <Redirect to='/'/>
             <Link to="/start">START</Link>
             <button to="/group" title="create a group test, display group results" disabled>GROUP</button>
             <button to="/history" title="your kraepelin results" disabled>HISTORY</button>
             <Link to='/account'>ACCOUNT</Link>
-            <Link to="/contactus">contact us</Link>
+            <a disabled>contact us</a>
         </main>
     )
 }
