@@ -305,7 +305,7 @@ form.dashboard input:focus {
 @media(max-width: 800px) {
     .result-page {
         grid-template-columns: 50% 50%;
-        width: 95%;
+        width: 90%;
     }
     .result-page div {
         padding: 10px;

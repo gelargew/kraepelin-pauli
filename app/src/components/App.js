@@ -8,6 +8,7 @@ import { Kraepelin } from './Kraepelin'
 import { userReducer } from './reducers'
 import { Result } from './Result'
 import { ToggleTheme } from './toggleTheme'
+import { BackButton } from './utils'
 
 export const baseUrl = window.location.origin
 export const userContext = createContext()
@@ -22,10 +23,7 @@ const App = () => {
     }, [])
 
     return (
-    <userContext.Provider value={{user, dispatchUser, setDarkTheme, darkTheme}}>
-        <button className='back-button' onClick={() => window.history.back()}>
-            <i className='fas fa-arrow-left fa-2x'></i>
-        </button>
+    <userContext.Provider value={{user, dispatchUser, setDarkTheme, darkTheme}}>       
         <ToggleTheme darkTheme={darkTheme} setDarkTheme={setDarkTheme} />
         <BrowserRouter>
         {user.is_authenticated ?       
@@ -34,15 +32,19 @@ const App = () => {
                     <Kraepelin />
                 </Route>
                 <Route path='/account'>
+                    <BackButton />
                     <SettingPage />
                 </Route>
                 <Route path="/start">
+                    <BackButton />
                     <InitPage />
                 </Route>
                 <Route path="/group">
+                    <BackButton />
                     <h1>Group</h1>
                 </Route>
                 <Route path="/contactus">
+                    <BackButton />
                     <h1>contactus</h1>
                 </Route>
                 <Route path="/result">
@@ -53,7 +55,10 @@ const App = () => {
                 </Route>
             </Switch>
             :
-            <AuthPage />
+            <>
+                <BackButton />
+                <AuthPage />
+            </>
         }
         </BrowserRouter>
     </userContext.Provider>

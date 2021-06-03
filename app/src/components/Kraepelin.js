@@ -6,12 +6,18 @@ import { useTimer } from './hooks'
 
 // record position for every minute to create chart !!!!! also make radar chart
 export const Kraepelin = () => {
-    const {length, numberFormat, numberFormatString, columnCount, time} = useLocation().state
+    const {
+        length, 
+        numberFormat, 
+        numberFormatString, 
+        columnCount, 
+        time} = useLocation().state
     const [numbers , setNumbers] = useState(randomArray({length: length + 1}))
     const [answers, setAnswers] = useState(new Array(length).fill(''))
     const [result, setResult] = useState(new Array(length).fill(0))
     const [position, setPosition] = useState(0)
     const [curNumbers, setCurNumbers] = useState(numbers.slice(0, columnCount))
+    const [curAnswers, setCurAnswers] = useState(answers.slice(0, columnCount))
     const [inputDisabled, setInputDisabled] = useState(true)
     const {user} = useContext(userContext)
     const container = useRef(null)
@@ -21,7 +27,7 @@ export const Kraepelin = () => {
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
-        return document.removeEventListener('keyup', handleKeyup)
+        console.log(columnCount)
     }, [])
 
     useEffect( () => {
@@ -29,16 +35,18 @@ export const Kraepelin = () => {
         if (position >= length) {
             setPosition(0)
             setCurNumbers(numbers.slice(0, columnCount))
+            setCurAnswers(answers.slice(0, columnCount))
         }
         else if (position > 0 && position % (curNumbers.length - 1) == 0) {
             setCurNumbers(numbers.slice(position, position + columnCount))
+            setCurAnswers(answers.slice(position, position + columnCount))
         }
         setTimeout(() => setInputDisabled(false), 0)
     },[position])
 
     const handleInput = async e => {
         setInputDisabled(true)
-        const val = e ? parseInt(e.target.value) : '0'
+        const val = parseInt(e.target.value)
         if (handleDown()) {
             setAnswers(prev => {
                 prev[position] = val
@@ -82,7 +90,7 @@ export const Kraepelin = () => {
     const context = () => {
         return 
     }
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const context = {
             user: user.id,
             timeleft: timer,
@@ -93,7 +101,7 @@ export const Kraepelin = () => {
             columnCount: columnCount,
             elapsed_time: time - timer
         }
-        const response = fetch(`${baseUrl}/api/kraepelin/`, {
+        const response = await fetch(`${baseUrl}/api/kraepelin/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,20 +109,28 @@ export const Kraepelin = () => {
             },
             body: JSON.stringify(context)
         })
+        const data = await response.json()
+        console.log(data)
         
     }
 
+    const getnum = i => {
+        console.log(parseInt(position/curNumbers.length)*(curNumbers.length-1) + i)
+        return numberFormat[answers[parseInt(position/curNumbers.length)*(curNumbers.length-1) + i]]
+    }
 
     return (
         <div className='kraepelin' >
-
+             <h1>{position}</h1>
             <div className='container' >
                 <div className={inputDisabled ? 'answer-line flash' : 'answer-line'}></div>
                 <div className='kraepelin-numbers' ref={container}>
                     {curNumbers.map((l, i) =>                  
                     <li key={i}>
-                        {numberFormat[l]}
-                        <p>{numberFormat[answers[parseInt(position/curNumbers.length)*(curNumbers.length - 1) + i]]}</p>
+                        {i}-{numberFormat[l]}
+                        {i < curNumbers.length - 1 && 
+                        <p>{parseInt(position/curNumbers.length)*(curNumbers.length-1) + i}</p>
+                        }                       
                     </li>
                     )}
                 </div>
