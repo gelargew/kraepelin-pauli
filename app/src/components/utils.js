@@ -1,4 +1,6 @@
-export {getCsrf, getRandomInt, randomArray}
+import { useEffect, useState } from "react"
+
+export {getCsrf, getRandomInt, randomArray, chartColor}
 
 const getRandomInt = (max=10) => Math.floor(Math.random() * max)
 const randomArray = ({max=10, length=50}) => [... new Array(length)].map(() => getRandomInt(max))
@@ -18,4 +20,14 @@ const getCsrf = () => {
         }
     }
     return cookieValue;
+}
+
+const chartColor = darkTheme => {
+    console.log(darkTheme)
+    const [[green, yellow, red], setColor] = useState(
+        darkTheme ? ['#29c7ac', '#E94560', '#EDE680'] : ['green', 'yellow', 'red'])
+    useEffect(() => setColor(
+        darkTheme ? ['#29c7ac', '#E94560', '#EDE680'] : ['green', 'yellow', 'red']), [darkTheme])
+    
+    return [green, yellow, red]
 }

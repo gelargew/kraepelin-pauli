@@ -21,6 +21,7 @@ export const Kraepelin = () => {
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
+        return document.removeEventListener('keyup', handleKeyup)
     }, [])
 
     useEffect( () => {
@@ -81,16 +82,18 @@ export const Kraepelin = () => {
     const context = () => {
         return 
     }
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
         const context = {
             user: user.id,
             timeleft: timer,
             numeral_system: numberFormatString,
             results: result.toString(),
             answers: answers.toString(),
-            numbers: numbers.toString()
+            numbers: numbers.toString(),
+            columnCount: columnCount,
+            elapsed_time: time - timer
         }
-        const response = await fetch(`${baseUrl}/api/kraepelin/`, {
+        const response = fetch(`${baseUrl}/api/kraepelin/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,7 +101,7 @@ export const Kraepelin = () => {
             },
             body: JSON.stringify(context)
         })
-        const data = await response.json()
+        
     }
 
 
@@ -145,7 +148,9 @@ export const Kraepelin = () => {
                         numeral_system: numberFormatString,
                         results: result,
                         answers: answers,
-                        numbers: numbers
+                        numbers: numbers,
+                        columnCount: columnCount,
+                        elapsed_time: time - timer
                     }
                 }} replace>
                     <p>{timer}</p>

@@ -22,7 +22,7 @@ const App = () => {
     }, [])
 
     return (
-    <userContext.Provider value={{user, dispatchUser, setDarkTheme}}>
+    <userContext.Provider value={{user, dispatchUser, setDarkTheme, darkTheme}}>
         <button className='back-button' onClick={() => window.history.back()}>
             <i className='fas fa-arrow-left fa-2x'></i>
         </button>

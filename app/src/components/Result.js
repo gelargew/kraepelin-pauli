@@ -1,26 +1,40 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {Chart, Scatter, Pie, Radar} from 'react-chartjs-2'
 import { useHistory, useLocation, Link } from 'react-router-dom'
+import { userContext } from './App'
+import { chartColor } from './utils'
 
 
 export const Result = () => {
-    const history = useHistory()
+    const {darkTheme} = useContext(userContext)
+    const [green, yellow, red] = chartColor(darkTheme)
     const data = useLocation().state
-    const {scatterData, pieData} = formatData(data.results)
+    const {
+        scatterData, 
+        pieData, 
+        accuracy,
+        answered
+    } = formatData(data.results, data.columnCount, green, yellow, red)
     const scatterOptions = {
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
         parsing: false,
         animation: false,
+        scale: {
+            ticks: {
+                precision: 0
+            }
+        },
         scales: {
             x: {
-                min: 1,
-                ticks: {
-                    beginAtZero: false,
-                    padding: 0
-                }
+                display: data.results.length > 666,
+                min: 0,
             },
             y: {
-                min: 1,
-                display: false
+                min: 1
             }
         }
     }
@@ -33,18 +47,27 @@ export const Result = () => {
     }
     return (
         <main className='result-page'>
-            <button onClick={() => console.log(data)}>showdata</button>
-            <div className='scatter-chart-wrapper'>
-                <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
+            
+            <div className='pie-chart-wrapper'>
+                <Pie className="pie-chart" data={pieData} options={pieOptions}/>
+            </div>
+            <div className='result-detail'>
+                <p>
+                    answered: {answered}/{data.results.length} <br/>
+                    Accuracy : {accuracy}% <br/>
+                    timeleft: {data.timeleft} seconds <br/>
+                    elapsed time: {data.elapsed_time} <br/>
+                    speed: {answered/data.elapsed_time} number/seconds
+                </p>
             </div>
             <div className='scatter-chart-wrapper'>
-                <Pie className="pie-chart" data={pieData} options={pieOptions}/>
+                <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
             </div>
         </main>
     )
 }
 
-const formatData = (result, columnCount = 100) => {
+const formatData = (result, columnCount = 100, green, yellow, red) => {
     let correct = []
     let empty = []
     let wrongs = []
@@ -64,17 +87,17 @@ const formatData = (result, columnCount = 100) => {
             {
                 label: 'correct',
                 data: correct,
-                backgroundColor: 'green'
+                backgroundColor: green
             },
             {
                 label: 'wrong',
                 data: wrongs,
-                backgroundColor: 'red'
+                backgroundColor: red
             },
             {
                 label: 'empty',
                 data: empty,
-                backgroundColor: 'yellow'
+                backgroundColor: yellow
             }
         ]
     }
@@ -82,7 +105,7 @@ const formatData = (result, columnCount = 100) => {
         datasets: [
             {
                 data: [correct.length, wrongs.length, empty.length],
-                backgroundColor: ['green', 'red', 'yellow']
+                backgroundColor: [green, red, yellow]
             }
         ],
         labels: ['correct', 'wrong', 'empty']
@@ -96,6 +119,7 @@ const formatData = (result, columnCount = 100) => {
         accuracy, 
         correct: correct.length,
         wrong: wrongs.length,
-        empty: empty.length
+        empty: empty.length,
+        answered: correct.length + wrongs.length
     }
 }

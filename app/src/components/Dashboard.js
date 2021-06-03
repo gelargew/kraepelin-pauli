@@ -72,7 +72,7 @@ const InitPage = () => {
                     time: kTime.idx*60,
                     numberFormat: numeralSystem[nm.selected],
                     numberFormatString: nm.selected,
-                    columnCount: 100
+                    columnCount: kLength.idx > 900 ? 100 : 10 * parseInt(kLength.idx / 100)
                 }
             }} title="start" replace>
                 START
@@ -82,11 +82,12 @@ const InitPage = () => {
 }
 
 const SettingPage = () => {
-    const {user, dispatchUser, setDarkTheme} = useContext(userContext)
+    const {user, dispatchUser, setDarkTheme, darkTheme} = useContext(userContext)
     const [[first_name, last_name], setName] = useState(['', ''])
     useEffect(() => setName([user.first_name, user.last_name]), [user])
     const changeFirstName = e => setName([e.target.value, last_name])
     const changeLastName = e => setName([first_name, e.target.value])
+    const [preventSubmit, setPreventSubmit] = useState(true)
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -103,14 +104,17 @@ const SettingPage = () => {
     return (
  
         <form className="dashboard" onSubmit={handleSubmit}>
-            <button type='button' onClick={() => setDarkTheme(dark => !dark)}>COLOR SCHEME</button>
             <input name='email' value={user.email} disabled/>
+            <button type='button' onClick={() => setDarkTheme(dark => !dark)}>{darkTheme ? 'DARK' : 'LIGHT'} MODE</button>           
+            <small>first name:</small>
             <input name='firstname' value={first_name} 
             onChange={changeFirstName} placeholder='first name' title='first name'/>
+            <small>last name:</small>
             <input name='lastname' value={last_name} 
             onChange={changeLastName} placeholder='last name' title='last name' />
-            <input type='password' name='password' onBlur={() => 'd'} />
-            <button title='save your settings'>Save</button>
+            <small>enter password to save changes.</small>
+            <input type='password' name='password' onFocus={() => setPreventSubmit(false)} required/>
+            <button title='save your settings' disabled={preventSubmit}>SAVE</button>
             <button type='button' onClick={() => dispatchUser({type: 'logout'})}>LOGOUT</button>
         </form>
     
