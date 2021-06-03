@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from 'react'
 import {Link, Prompt, useLocation} from 'react-router-dom'
 import { baseUrl, userContext } from './App'
 import { getCsrf, randomArray } from './utils'
-import { useTimer } from './hooks'
+import { useTimer, useSliceData } from './hooks'
 
 // record position for every minute to create chart !!!!! also make radar chart
 export const Kraepelin = () => {
@@ -16,8 +16,8 @@ export const Kraepelin = () => {
     const [answers, setAnswers] = useState(new Array(length).fill(''))
     const [result, setResult] = useState(new Array(length).fill(0))
     const [position, setPosition] = useState(0)
-    const [curNumbers, setCurNumbers] = useState(numbers.slice(0, columnCount))
-    const [curAnswers, setCurAnswers] = useState(answers.slice(0, columnCount))
+    const [curNumbers] = useSliceData(numbers, columnCount - 1, position)
+    const [curAnswers, setCurAnswers] = useSliceData(answers, columnCount - 1, position)
     const [inputDisabled, setInputDisabled] = useState(true)
     const {user} = useContext(userContext)
     const container = useRef(null)
@@ -31,16 +31,13 @@ export const Kraepelin = () => {
     }, [])
 
     useEffect( () => {
-        container.current.style.transform = `translateY(-${position % (curNumbers.length - 1)*11}0px)`
+        container.current.style.transform = `translateY(-${position % (curNumbers?.length - 1)*11}0px)`
         if (position >= length) {
             setPosition(0)
-            setCurNumbers(numbers.slice(0, columnCount))
-            setCurAnswers(answers.slice(0, columnCount))
         }
-        else if (position > 0 && position % (curNumbers.length - 1) == 0) {
-            setCurNumbers(numbers.slice(position, position + columnCount))
-            setCurAnswers(answers.slice(position, position + columnCount))
-        }
+        // else if (position > 0 && position % (curNumbers.length - 1) == 0) {
+        //     setCurNumbers(numbers.slice(position, position + columnCount))
+        // }
         setTimeout(() => setInputDisabled(false), 0)
     },[position])
 
@@ -48,6 +45,10 @@ export const Kraepelin = () => {
         setInputDisabled(true)
         const val = parseInt(e.target.value)
         if (handleDown()) {
+            setCurAnswers(prev => {
+                prev[position % (columnCount - 1)] = val
+                return prev
+            })
             setAnswers(prev => {
                 prev[position] = val
                 return prev
@@ -78,7 +79,8 @@ export const Kraepelin = () => {
     const clickInput = idx => kraepelinInputs.current.children[idx].click()
     const handleUp = () => {
         if (position < 1) return;
-        setPosition(prev => prev - 1)
+        if (position % columnCount === columnCount - 1) setPosition(prev => prev - columnCount + 1)
+        else setPosition(prev => prev - 1)
     }
     const handleDown = () => {
         if (position >= length) {
@@ -125,11 +127,11 @@ export const Kraepelin = () => {
             <div className='container' >
                 <div className={inputDisabled ? 'answer-line flash' : 'answer-line'}></div>
                 <div className='kraepelin-numbers' ref={container}>
-                    {curNumbers.map((l, i) =>                  
+                    {curNumbers?.map((l, i) =>                  
                     <li key={i}>
                         {i}-{numberFormat[l]}
                         {i < curNumbers.length - 1 && 
-                        <p>{parseInt(position/curNumbers.length)*(curNumbers.length-1) + i}</p>
+                        <p>{curAnswers[i]}</p>
                         }                       
                     </li>
                     )}

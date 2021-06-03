@@ -1,6 +1,6 @@
 import { useState, useReducer, useEffect } from 'react'
 
-export { useFetchReducer, useTimer }
+export { useFetchReducer, useTimer, useSliceData }
 
 const useFetchReducer = (initialState, reducer) => {
     const [state, setState] = useState(initialState)
@@ -42,4 +42,14 @@ const useTimer = (initialState, callback) => {
     }, [counter])
 
     return [counter, timesUp]
+}
+
+const useSliceData = (data, range, position) => {
+    const [state, setState] = useState([])
+    useEffect(() => {
+        if(position % range != 0) return  
+        setState(data.slice(position, position + range + 1))
+    }, [position])
+
+    return [state, setState]
 }
