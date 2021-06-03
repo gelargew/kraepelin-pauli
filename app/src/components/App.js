@@ -48,6 +48,7 @@ const App = () => {
                     <h1>contactus</h1>
                 </Route>
                 <Route path="/result">
+                    <BackButton />
                     <Result />
                 </Route>
                 <Route path='/'>

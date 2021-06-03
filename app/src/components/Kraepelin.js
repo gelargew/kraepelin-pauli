@@ -27,7 +27,6 @@ export const Kraepelin = () => {
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
-        console.log(columnCount)
     }, [])
 
     useEffect( () => {
@@ -123,13 +122,12 @@ export const Kraepelin = () => {
 
     return (
         <div className='kraepelin' >
-             <h1>{position}</h1>
             <div className='container' >
                 <div className={inputDisabled ? 'answer-line flash' : 'answer-line'}></div>
                 <div className='kraepelin-numbers' ref={container}>
                     {curNumbers?.map((l, i) =>                  
                     <li key={i}>
-                        {i}-{numberFormat[l]}
+                        {numberFormat[l]}
                         {i < curNumbers.length - 1 && 
                         <p>{curAnswers[i]}</p>
                         }                       

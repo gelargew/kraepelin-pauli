@@ -25,9 +25,9 @@ const getCsrf = () => {
 const chartColor = darkTheme => {
     console.log(darkTheme)
     const [[green, yellow, red], setColor] = useState(
-        darkTheme ? ['#29c7ac', '#EDE680', '#E94560'] : ['green', 'yellow', 'red'])
+        darkTheme ? ['#29c7ac', '#EDE680', '#E94560'] : ['green', '#FFDE03', '#B00020'])
     useEffect(() => setColor(
-        darkTheme ? ['#29c7ac','#EDE680', '#E94560'] : ['green', 'yellow', 'red']), [darkTheme])
+        darkTheme ? ['#29c7ac','#EDE680', '#E94560'] : ['green', '#FFDE03', '#B00020']), [darkTheme])
     
     return [green, yellow, red]
 }

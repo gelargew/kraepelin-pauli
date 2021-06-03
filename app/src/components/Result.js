@@ -44,6 +44,11 @@ export const Result = () => {
                 borderWidth: 0
             }
         },
+        plugins: {
+           legend: {
+               display: false
+           }
+        }
     }
     return (
         <main className='result-page'>
@@ -53,11 +58,12 @@ export const Result = () => {
             </div>
             <div className='result-detail'>
                 <p>
+                    <strong>Your Result:</strong><hr/>
                     answered: {answered}/{data.results.length} <br/>
                     Accuracy : {accuracy}% <br/>
                     timeleft: {data.timeleft} seconds <br/>
                     elapsed time: {data.elapsed_time} <br/>
-                    speed: {answered/data.elapsed_time} number/seconds
+                    speed: {(answered/data.elapsed_time).toFixed(1)} number/seconds
                 </p>
             </div>
             <div className='scatter-chart-wrapper'>
