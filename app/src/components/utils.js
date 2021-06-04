@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 
-export {getCsrf, getRandomInt, randomArray, chartColor, BackButton}
+export {getCsrf, getRandomInt, randomArray, chartColor, BackButton, sumArray}
 
 const getRandomInt = (max=10) => Math.floor(Math.random() * max)
 const randomArray = ({max=10, length=50}) => [... new Array(length)].map(() => getRandomInt(max))
@@ -23,7 +23,6 @@ const getCsrf = () => {
 }
 
 const chartColor = darkTheme => {
-    console.log(darkTheme)
     const [[green, yellow, red], setColor] = useState(
         darkTheme ? ['#29c7ac', '#EDE680', '#E94560'] : ['green', '#FFDE03', '#B00020'])
     useEffect(() => setColor(
@@ -37,3 +36,5 @@ const BackButton = () => {
                 <i className='fas fa-arrow-left fa-2x'></i>
             </button>
 }
+
+const sumArray = (total, num) => total + num

@@ -23,7 +23,13 @@ export const Kraepelin = () => {
     const container = useRef(null)
     const kraepelinInputs = useRef(null)
     const submitButton = useRef(null)
-    const [timer, timesUp] = useTimer(time, () => submitButton.current.click())
+    const [answer, setAnswer] = useState({
+        change: 0,
+        count: 0,
+        countPerMinute: [],
+        changePerMinute: []
+    })
+    const [timer, timesUp] = useTimer(time, () => submitButton.current.click(), setAnswer)
 
     useEffect(() => {
         document.addEventListener('keyup', handleKeyup)
@@ -49,6 +55,8 @@ export const Kraepelin = () => {
                 return prev
             })
             setAnswers(prev => {
+                if (prev[position] != '') setAnswer({...answer, change: answer.change + 1})
+                else setAnswer({...answer, count: answer.count + 1})
                 prev[position] = val
                 return prev
             })
@@ -88,9 +96,6 @@ export const Kraepelin = () => {
         setPosition(prev => prev + 1)
         return true
     }
-    const context = () => {
-        return 
-    }
     const handleSubmit = async () => {
         const context = {
             user: user.id,
@@ -113,11 +118,6 @@ export const Kraepelin = () => {
         const data = await response.json()
         console.log(data)
         
-    }
-
-    const getnum = i => {
-        console.log(parseInt(position/curNumbers.length)*(curNumbers.length-1) + i)
-        return numberFormat[answers[parseInt(position/curNumbers.length)*(curNumbers.length-1) + i]]
     }
 
     return (
@@ -166,7 +166,8 @@ export const Kraepelin = () => {
                         answers: answers,
                         numbers: numbers,
                         columnCount: columnCount,
-                        elapsed_time: time - timer
+                        elapsed_time: time - timer,
+                        answer: answer
                     }
                 }} replace>
                     <p>{timer}</p>

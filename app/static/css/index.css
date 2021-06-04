@@ -297,6 +297,7 @@ form.dashboard input:focus {
     gap: 10px;
     place-self: center;
     width: 70%;
+    height: 90%;
 }
 
 .result-page div {
@@ -348,12 +349,6 @@ form.dashboard input:focus {
     }
     .scatter-chart-wrapper div {
         width: 600px;
-    }
-}
-
-@media(max-height: 650px) {
-    .result-page {
-        transform: translateY(30%);
     }
 }
 

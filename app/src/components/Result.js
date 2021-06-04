@@ -1,8 +1,9 @@
 import React, { useContext, useEffect } from 'react'
-import {Chart, Scatter, Pie, Radar} from 'react-chartjs-2'
+import {Chart, Scatter, Pie, Radar, Line} from 'react-chartjs-2'
 import { useHistory, useLocation, Link } from 'react-router-dom'
 import { userContext } from './App'
 import { chartColor } from './utils'
+
 
 
 export const Result = () => {
@@ -15,41 +16,7 @@ export const Result = () => {
         accuracy,
         answered
     } = formatData(data.results, data.columnCount, green, yellow, red)
-    const scatterOptions = {
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        parsing: false,
-        animation: false,
-        scale: {
-            ticks: {
-                precision: 0
-            }
-        },
-        scales: {
-            x: {
-                display: data.results.length > 666,
-                min: 0,
-            },
-            y: {
-                min: 1
-            }
-        }
-    }
-    const pieOptions = {
-        elements: {
-            arc: {
-                borderWidth: 0
-            }
-        },
-        plugins: {
-           legend: {
-               display: false
-           }
-        }
-    }
+    
     return (
         <main className='result-page'>
             
@@ -68,12 +35,19 @@ export const Result = () => {
             </div>
             <div className='scatter-chart-wrapper'>
                 <div>
-                    <Scatter className="scatter-chart" data={scatterData} options={scatterOptions}/>
+                    <Scatter className="scatter-chart" data={scatterData} options={scatterOptions(data.results.length)}/>
+                </div>
+            </div>
+            <div className='line-chart-wrapper'>
+                <div>
+                    <Line className='line-chart' data={lineData(data.answer)}/>
                 </div>
             </div>
         </main>
     )
 }
+
+
 
 const formatData = (result, columnCount = 100, green, yellow, red) => {
     let correct = []
@@ -129,5 +103,60 @@ const formatData = (result, columnCount = 100, green, yellow, red) => {
         wrong: wrongs.length,
         empty: empty.length,
         answered: correct.length + wrongs.length
+    }
+}
+
+const lineData = ({count, change, countPerMinute, changePerMinute}) => {
+    const data = {
+        datasets: [
+            {
+                label: 'answerPerMinute',
+                data: countPerMinute,
+                borderColor: 'green',
+            },
+            {
+                label: 'changePerMinute',
+                data: changePerMinute,
+                borderColor: 'teal'
+            }
+        ]
+    }
+    return data
+}
+
+const scatterOptions = length => {
+    return {
+    plugins: {
+        legend: {
+            display: false
+        }
+    },
+    parsing: false,
+    animation: false,
+    scale: {
+        ticks: {
+            precision: 0
+        }
+    },
+    scales: {
+        x: {
+            display: length > 666,
+            min: 0,
+        },
+        y: {
+            min: 1
+        }
+    }
+}}
+const pieOptions = {
+    elements: {
+        arc: {
+            borderWidth: 0
+        }
+    },
+    plugins: {
+       legend: {
+           display: false
+       }
     }
 }
