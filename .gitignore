@@ -5,3 +5,4 @@ package-lock.json
 staticfiles
 *.pyc
 .env
+migrations

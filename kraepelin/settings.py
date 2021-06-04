@@ -29,7 +29,7 @@ ADMINS = [('Gelar', 'gelargew@gmail.com')]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://kpauli.herokuapp.com']
 
 
 # Application definition
