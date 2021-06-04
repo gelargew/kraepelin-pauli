@@ -23,12 +23,6 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username',)
 
-    
-
-    class Meta:
-        db_table = 'users'
-        verbose_name = 'user'
-
     def get_username(self):
         return self.email
 
