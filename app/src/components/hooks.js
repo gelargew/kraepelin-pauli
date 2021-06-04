@@ -37,7 +37,7 @@ const useTimer = (initialState, callback, setAnswer) => {
     useEffect(() => {
         if (counter > 0) {
             setTimeout(() =>  setCounter(counter - 1), 1000)
-            if (counter % 10 === 0) {
+            if (counter % 2 === 0 && typeof setAnswer === 'function') {
                 setAnswer(prev => {
                     let priorCount = prev.countPerMinute.reduce(sumArray, 0)
                     prev.countPerMinute.push(prev.count - priorCount)

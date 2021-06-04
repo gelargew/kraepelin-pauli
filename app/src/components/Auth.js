@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, Redirect, Route, useHistory } from 'react-router-dom';
 import { baseUrl, userContext } from './App';
-import { getCsrf } from './utils'
+import { useTimer } from './hooks';
+import { BackButton, getCsrf } from './utils'
 
 export {AuthPage, LoginPage, RegisterPage}
 
@@ -13,9 +14,11 @@ const AuthPage = () => {
         <>
             <Redirect to='/' />
             <Route path='/register'>
+                <BackButton />
                 <RegisterPage />
             </Route>
             <Route path='/login'>
+                <BackButton />
                 <LoginPage />
             </Route>
             <Route path='/activate'>
@@ -23,6 +26,7 @@ const AuthPage = () => {
             </Route>
             <Route exact path="/">
                 <main className='dashboard'>
+                <h1 className='logo'>KPauli</h1>
                     <Link to='/register'>REGISTER</Link>
                     <Link to='/login'>LOGIN</Link>
                 </main>
@@ -94,6 +98,8 @@ const ActivatePage = () => {
     const [password, setPassword] = useState('')
     const [passwordMatch, setPasswordMatch] = useState(false)
     const [msg, setMsg] = useState('')
+    const [resendDisabled, setResendDisabled] = useState(true)
+    const [timer, setTimer] = useTimer(30, () => setResendDisabled(false))
 
     const handleActivate = e => {
         e.preventDefault()
@@ -125,6 +131,15 @@ const ActivatePage = () => {
         })
     }
 
+    const resendEmail = e => {
+        e.preventDefault()
+        if (resendDisabled) return
+        dispatchUser({
+            type: 'register',
+            data: {email: user.email}
+        })
+    }
+
     const confirmPassword = e => {
         setPasswordMatch(e.target.value === password)
     }
@@ -133,14 +148,26 @@ const ActivatePage = () => {
         <form className='dashboard' onSubmit={passwordPage ? handleCreate : handleActivate}>
             <input name='email' type='email' value={user.email} disabled />
             <input name='token' disabled={passwordPage} placeholder='6-character-token'/>
-            {passwordPage && 
+            {passwordPage ?
             <>
                 <input type="password" name="password" value={password} 
                 onChange={e => setPassword(e.target.value)} placeholder='create your password' required
                 pattern="[0-9a-zA-Z]{8,16}" title="Enter a password consisting of 8-16 hexadecimal digits"/>
-                <input className={!passwordMatch && 'password-alert' } type="password" 
+                <input className={!passwordMatch ? 'password-alert' : ''} type="password" 
                 placeholder='confirm password' onChange={confirmPassword} required />
-            </>}
+            </>
+            :
+            <>
+                <small>
+                    you should receive an email with token within 30 seconds
+                    <a className={resendDisabled ? 'resend-email-disabled' : 'resend-email'} 
+                    onClick={resendEmail}>
+                        resend token ({timer})
+                    </a>
+                </small>
+                
+            </>
+            }
             <button disabled={passwordPage && !passwordMatch}>
                 {passwordPage ? 'Create account' : 'Confirm token'}
             </button>

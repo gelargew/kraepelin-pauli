@@ -57,7 +57,6 @@ const App = () => {
             </Switch>
             :
             <>
-                <BackButton />
                 <AuthPage />
             </>
         }

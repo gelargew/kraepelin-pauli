@@ -16,6 +16,24 @@ export const Result = () => {
         accuracy,
         answered
     } = formatData(data.results, data.columnCount, green, yellow, red)
+    useEffect(() => console.log(data), [])
+
+    const lineData = {
+        datasets: [
+            {
+                label: 'answerPerMinute',
+                data: data.answer.countPerMinute,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.2
+            },
+            {
+                label: 'changePerMinute',
+                data: [4,2,3,5,1,2,6,8,1,2,3,5],
+                borderColor: 'white',
+                tension: 0.2
+            }
+        ]
+    }
     
     return (
         <main className='result-page'>
@@ -30,7 +48,8 @@ export const Result = () => {
                     Accuracy : {accuracy}% <br/>
                     timeleft: {data.timeleft} seconds <br/>
                     elapsed time: {data.elapsed_time} <br/>
-                    speed: {(answered/data.elapsed_time).toFixed(1)} number/seconds
+                    speed: {(answered/data.elapsed_time).toFixed(1)} number/seconds<br/>
+                    answer changed: {data.answer.change}
                 </p>
             </div>
             <div className='scatter-chart-wrapper'>
@@ -38,11 +57,11 @@ export const Result = () => {
                     <Scatter className="scatter-chart" data={scatterData} options={scatterOptions(data.results.length)}/>
                 </div>
             </div>
-            <div className='line-chart-wrapper'>
+            {/* <div className='line-chart-wrapper'>
                 <div>
-                    <Line className='line-chart' data={lineData(data.answer)}/>
+                    <Line className='line-chart' data={lineData}/>
                 </div>
-            </div>
+            </div> */}
         </main>
     )
 }
@@ -106,22 +125,10 @@ const formatData = (result, columnCount = 100, green, yellow, red) => {
     }
 }
 
-const lineData = ({count, change, countPerMinute, changePerMinute}) => {
-    const data = {
-        datasets: [
-            {
-                label: 'answerPerMinute',
-                data: countPerMinute,
-                borderColor: 'green',
-            },
-            {
-                label: 'changePerMinute',
-                data: changePerMinute,
-                borderColor: 'teal'
-            }
-        ]
-    }
-    return data
+
+
+const lineOptions = {
+
 }
 
 const scatterOptions = length => {

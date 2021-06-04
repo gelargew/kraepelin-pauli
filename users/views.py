@@ -51,7 +51,7 @@ def user_register(request):
     user.refresh_token()
     email_body = f'your authentication token is {user.auth_token}'
     send_mail(
-        'Verify your account', 
+        'Verify your account (KPauli)', 
         email_body,
         'kraepelin_pauli@rustmail.com',
         [data['email']],
