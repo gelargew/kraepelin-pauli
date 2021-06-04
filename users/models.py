@@ -1,7 +1,7 @@
 import string
 import random
 
-from django.contrib.auth.models import BaseUserManager, AbstractUser, UserManager
+from django.contrib.auth.models import  AbstractUser, UserManager
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
@@ -10,15 +10,6 @@ from django.db import models
 def generate_auth_token():
     s = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     return s
-
-
-
-class UserManager(UserManager):
-    def get_by_natural_key(self, username:str) -> str:
-        try:
-            return self.get(username=username)
-        except self.model.DoesNotExist:
-            return self.get(is_active=True, email=username)
 
 
 class User(AbstractUser):
@@ -45,18 +36,7 @@ class User(AbstractUser):
         if self.is_staff or self.is_superuser:
             return self.username
         return self.email or '<anonymous>'
-    
-    def get_full_name(self) -> str:
-        full_name = super().get_full_name()
-        if self.first_name or self.last_name:
-            return f'{self.first_name} {self.last_name}'
-        return self.get_short_name()
 
-    def get_short_name(self) -> str:
-        short_name = super().get_short_name()
-        if short_name:
-            return short_name
-        return self.email
 
     def validate_unique(self, exclude: None) -> None:
         """
