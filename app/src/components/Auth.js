@@ -1,33 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link, Redirect, Route, useHistory } from 'react-router-dom';
 import { baseUrl, userContext } from './App';
+import { getCsrf } from './utils'
 
-export {AuthPage, LoginPage, RegisterPage, getCsrf}
-
-
-const getCsrf = () => {
-    const name = 'csrftoken'
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+export {AuthPage, LoginPage, RegisterPage}
 
 
 const AuthPage = () => {
     const {user} =useContext(userContext)
     
     return (
-        <main className="dashboard">
+        <>
             <Redirect to='/' />
             <Route path='/register'>
                 <RegisterPage />
@@ -39,10 +22,12 @@ const AuthPage = () => {
                 <ActivatePage />
             </Route>
             <Route exact path="/">
-                <Link to='/register'>REGISTER</Link>
-                <Link to='/login'>LOGIN</Link>
+                <main className='dashboard'>
+                    <Link to='/register'>REGISTER</Link>
+                    <Link to='/login'>LOGIN</Link>
+                </main>
             </Route>           
-        </main>
+        </>
     )
 }
 
@@ -61,15 +46,14 @@ const LoginPage = () => {
         })
     }
     
-    return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <input name='email' type='email' />
-                <input name='password' type='password' placeholder="password" />
-                <button>LOGIN</button>
-            </form>
-            <Link to="/register">register</Link>
-        </>
+    return (    
+        <form className='dashboard' onSubmit={handleSubmit}>
+            <input name='email' type='email' placeholder='enter your email' required/>
+            <input name='password' type='password' placeholder="enter your password" required
+            pattern="[0-9a-zA-Z]{8,16}" title="Enter aa password consisting of 8-16 hexadecimal digits"/>
+            <button>LOGIN</button>
+        </form>           
+       
     )
 }
 
@@ -77,21 +61,29 @@ const LoginPage = () => {
 const RegisterPage = () => {
     const {dispatchUser} = useContext(userContext)
     const history = useHistory()
-    const handleRegister = e => {
+    const [msg, setMsg] = useState('')
+    const handleRegister = async e => {
         e.preventDefault()  
-        dispatchUser({
+        e.target.submit.disabled = true
+        await dispatchUser({
             type: 'register',
             data: {
                 email: e.target.email.value
             },
-            perform: () => history.push('/activate')
+            perform: status => {
+                if (status === 201) history.push('/activate')
+                else if (status === 409) setMsg('email has been used')
+                else setMsg('something went wrong')
+            }
         })
+        setTimeout(() => e.target.submit.disabled = false, 2000)
     }
 
     return (
-        <form onSubmit={handleRegister}>
-            <input name='email' type='email' />
-            <button>Register</button>
+        <form className='dashboard' onSubmit={handleRegister} >
+            <input name='email' type='email' placeholder='enter your email' required/>
+            <small>{msg}</small>
+            <button name='submit'>Register</button>           
         </form>
     )
 }
@@ -99,6 +91,9 @@ const RegisterPage = () => {
 const ActivatePage = () => {
     const {user, dispatchUser} = useContext(userContext)
     const [passwordPage, setPasswordPage] = useState(false)
+    const [password, setPassword] = useState('')
+    const [passwordMatch, setPasswordMatch] = useState(false)
+    const [msg, setMsg] = useState('')
 
     const handleActivate = e => {
         e.preventDefault()
@@ -108,7 +103,14 @@ const ActivatePage = () => {
                 email: e.target.email.value,
                 auth_token: e.target.token.value
             },
-            perform: status => status === 200 && setPasswordPage(true)
+            perform: status => {
+                if (status === 200) {
+                    setPasswordPage(true)
+                    setMsg('')
+                }
+                else if (status === 404) setMsg('incorrect token')
+                else setMsg('something went wrong')
+            }
         })
     }
     const handleCreate = e => {
@@ -123,16 +125,25 @@ const ActivatePage = () => {
         })
     }
 
+    const confirmPassword = e => {
+        setPasswordMatch(e.target.value === password)
+    }
+
     return (    
-        <form onSubmit={passwordPage ? handleCreate : handleActivate}>
-            <input name='email' type='email' value={user.email} disabled readOnly />
-            <input name='token' disabled={passwordPage}/>
+        <form className='dashboard' onSubmit={passwordPage ? handleCreate : handleActivate}>
+            <input name='email' type='email' value={user.email} disabled />
+            <input name='token' disabled={passwordPage} placeholder='6-character-token'/>
             {passwordPage && 
             <>
-                <input type="password" name="password" />
-                <input type="password" />
+                <input type="password" name="password" value={password} 
+                onChange={e => setPassword(e.target.value)} placeholder='create your password' required
+                pattern="[0-9a-zA-Z]{8,16}" title="Enter a password consisting of 8-16 hexadecimal digits"/>
+                <input className={!passwordMatch && 'password-alert' } type="password" 
+                placeholder='confirm password' onChange={confirmPassword} required />
             </>}
-            <button>{passwordPage ? 'Create account' : 'Confirm token'}</button>
+            <button disabled={passwordPage && !passwordMatch}>
+                {passwordPage ? 'Create account' : 'Confirm token'}
+            </button>
         </form>
     )
 }

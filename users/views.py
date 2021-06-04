@@ -79,7 +79,7 @@ def user_activate(request):
             user.auth_token = None
             user.save()
             login(request, user)
-            return JsonResponse(UserSerializer(user).data, status=201)
+            return JsonResponse(UserSerializer(user).data, status=200)
         else:
             user.is_active = True
             user.save()

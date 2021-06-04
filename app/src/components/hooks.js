@@ -24,7 +24,7 @@ const useFetchReducer = (initialState, reducer) => {
         }
         
         catch (e) {
-            if (typeof performError === 'function') performError()
+            if (typeof performError === 'function') performError(response.status)
         } 
     },[context, timestamp])
 
@@ -54,7 +54,7 @@ const useTimer = (initialState, callback, setAnswer) => {
         }
     }, [counter])
 
-    return [counter, timesUp]
+    return [counter, setCounter]
 }
 
 const useSliceData = (data, range, position) => {
