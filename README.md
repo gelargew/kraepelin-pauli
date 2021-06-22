@@ -2,5 +2,4 @@
 Kraepelin/pauli app, an online arithmetic test
 
 
-
-setting up email verification
+currently developing the mobile version [Kpauli-mobile](https://github.com/gelargew/kraepelin-pauli)
